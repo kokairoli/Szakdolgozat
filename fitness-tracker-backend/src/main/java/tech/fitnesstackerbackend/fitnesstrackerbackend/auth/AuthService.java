@@ -28,7 +28,11 @@ public class AuthService {
             return AuthResponse.builder().errorMessage("Email already taken").build();
         }
 
-        User user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName()).email(request.getEmail()).password(passwordEncoder.encode(request.getPassword())).role(Role.USER).build();
+        User user = User.builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword())).role(Role.USER).build();
         repository.save(user);
         String token = jwtService.generateToken(user);
         return AuthResponse.builder().token(token).build();
