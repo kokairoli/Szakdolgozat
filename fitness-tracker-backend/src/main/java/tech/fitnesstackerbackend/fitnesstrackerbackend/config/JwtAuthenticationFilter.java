@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 
 import java.io.IOException;
 
@@ -21,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     private final UserDetailsService userDetailsService;
 
@@ -30,9 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull FilterChain filterChain) throws ServletException, IOException {
         final String authenticationHeader = request.getHeader("Authorization");
-
         final String token;
-        if(authenticationHeader == null || authenticationHeader.startsWith("Bearer ")){
+        if(authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
             return;
         }

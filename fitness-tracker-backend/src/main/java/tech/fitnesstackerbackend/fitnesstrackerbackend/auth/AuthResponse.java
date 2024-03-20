@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -12,5 +13,6 @@ import lombok.NoArgsConstructor;
 
 public class AuthResponse {
     private String token;
+    private String errorMessage;
 
 }
