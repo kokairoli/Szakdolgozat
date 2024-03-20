@@ -25,12 +25,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
-        var response = ResponseEntity.ok(authService.login(request));
-        if (response.getStatusCode().value() != 200){
-            userService.setLoggedInUser(null);
-        }
-        return response;
-
+        return ResponseEntity.ok(authService.login(request));
     }
 
 

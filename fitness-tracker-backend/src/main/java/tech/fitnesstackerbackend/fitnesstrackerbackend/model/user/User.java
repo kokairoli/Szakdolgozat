@@ -1,5 +1,6 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,7 @@ public class User implements UserDetails {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private List<Weight> weights;
 
     @Enumerated(EnumType.STRING)

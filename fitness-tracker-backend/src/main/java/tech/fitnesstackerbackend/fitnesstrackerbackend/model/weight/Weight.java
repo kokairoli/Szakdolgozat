@@ -1,20 +1,20 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class Weight {
     @Id
@@ -26,12 +26,18 @@ public class Weight {
     private Double weight;
 
     @Column(nullable = false)
-    private Date recordedAt;
+    private LocalDate recordedAt;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference
     private User user;
 
+    public Weight(Double weight, LocalDate recordedAt) {
+        this.weight = weight;
+        this.recordedAt = recordedAt;
+    }
 
     @Override
     public String toString() {

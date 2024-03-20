@@ -1,17 +1,14 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight;
 
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping(name = "api/v1/weight")
+@RequestMapping("api/v1/weight")
 public class WeightController {
 
 
@@ -25,7 +22,13 @@ public class WeightController {
     }
 
     @GetMapping
-    public Integer getWeigth(){
-        return userService.getLoggedInUser().getId();
+    public List<WeightDTO> getWeight(){
+        return weightService.getAllWeightForUser();
+
+    }
+
+    @PostMapping
+    public WeightDTO addWeightToUser(@RequestBody WeightDTO weightDTO){
+        return weightService.addWeightToUser(weightDTO);
     }
 }

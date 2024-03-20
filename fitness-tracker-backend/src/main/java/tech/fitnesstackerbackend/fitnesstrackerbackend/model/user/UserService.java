@@ -4,9 +4,8 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
@@ -28,6 +27,12 @@ public class UserService {
     public boolean userExists(String email){
         return userRepository.findByEmail(email).isPresent();
     }
+
+    public User getLoggedInUserById(Integer id){
+        return userRepository.findById(id).get();
+    }
+
+
 
 
 }
