@@ -6,6 +6,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { UserService } from 'src/app/services/user.service';
+import { AuthResponseDTO } from 'src/app/model/UserDTOs/AuthResponseDTO';
 
 @Component({
   selector: 'app-welcome',
@@ -34,7 +36,33 @@ export class WelcomeComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  register() {}
+  constructor(private userService: UserService) {}
 
-  login() {}
+  register() {
+    localStorage.removeItem('access_token');
+    this.userService
+      .registerUser({
+        firstName: 'Roland',
+        lastName: 'Kókai',
+        email: 'asdasd@gmail.com',
+        password: '1234',
+      })
+      .subscribe((response: AuthResponseDTO) => {
+        localStorage.setItem('access_token', response.token);
+      });
+  }
+
+  login() {
+    localStorage.removeItem('access_token');
+    if (this.loginFormGroup.valid) {
+      this.userService
+        .loginUser({
+          email: this.loginFormGroup.get('email')?.value,
+          password: this.loginFormGroup.get('password')?.value,
+        })
+        .subscribe((response: AuthResponseDTO) => {
+          localStorage.setItem('access_token', response.token);
+        });
+    }
+  }
 }
