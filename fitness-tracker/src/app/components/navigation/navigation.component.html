@@ -1,0 +1,19 @@
+<ul nz-menu nzMode="horizontal">
+  <li
+    (click)="navigateTo('/home')"
+    [nzSelected]="urlSegments[0] === 'home'"
+    nz-menu-item
+  >
+    Home
+  </li>
+  <li
+    (click)="navigateTo('progress')"
+    [nzSelected]="urlSegments[0] === 'progress'"
+    nz-menu-item
+  >
+    Progress
+  </li>
+  <li [nzSelected]="urlSegments[0] === 'goals'" nz-menu-item>Goals</li>
+  <li [nzSelected]="urlSegments[0] === 'exercises'" nz-menu-item>Exercises</li>
+  <li [nzSelected]="urlSegments[0] === 'Coaches'" nz-menu-item>Coaches</li>
+</ul>

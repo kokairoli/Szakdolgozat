@@ -1,0 +1,89 @@
+<nz-card style="width: 300px" nzTitle="Login">
+  <form
+    nz-form
+    [nzLayout]="'inline'"
+    [formGroup]="loginFormGroup"
+    (ngSubmit)="login()"
+  >
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your Email!">
+        <nz-input-group nzPrefixIcon="mail">
+          <input formControlName="email" nz-input placeholder="Email" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your Password!">
+        <nz-input-group nzPrefixIcon="lock">
+          <input
+            formControlName="password"
+            nz-input
+            type="password"
+            placeholder="Password"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary" [disabled]="!loginFormGroup.valid">
+          Log in
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>
+
+<nz-card style="width: 300px" nzTitle="Register">
+  <form
+    nz-form
+    [nzLayout]="'inline'"
+    [formGroup]="registerFormGroup"
+    (ngSubmit)="register()"
+  >
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your first name!">
+        <nz-input-group nzPrefixIcon="user">
+          <input
+            formControlName="firstName"
+            nz-input
+            placeholder="First name"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your last name!">
+        <nz-input-group nzPrefixIcon="user">
+          <input formControlName="lastName" nz-input placeholder="Last name" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your Email!">
+        <nz-input-group nzPrefixIcon="mail">
+          <input formControlName="email" nz-input placeholder="Email" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your Password!">
+        <nz-input-group nzPrefixIcon="lock">
+          <input
+            formControlName="password"
+            nz-input
+            type="password"
+            placeholder="Password"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button nz-button nzType="primary" [disabled]="!loginFormGroup.valid">
+          Register
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>
