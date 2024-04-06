@@ -1,6 +1,5 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight.Weight;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,9 +27,6 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference
-    private List<Weight> weights;
 
     @Enumerated(EnumType.STRING)
     private Role role;
