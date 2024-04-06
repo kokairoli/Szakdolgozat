@@ -21,10 +21,11 @@ public class WeightService {
     }
 
     public List<WeightDTO> getAllWeightForUser(){
-        return weightRepository.findByUserId(userService.getLoggedInUser().getId()).stream().map((element)->translateWeightToWeightDTO(element)).toList();
+        return weightRepository.findByUserId(userService.getLoggedInUserId()).stream().map((element)->translateWeightToWeightDTO(element)).toList();
     }
 
     public WeightDTO addWeightToUser(WeightDTO weightDTO){
+
         weightDTO.setRecordedAt(LocalDate.now());
         Weight weight = new Weight(weightDTO.getWeight(), weightDTO.getRecordedAt());
         weight.setUser(userService.getLoggedInUser());

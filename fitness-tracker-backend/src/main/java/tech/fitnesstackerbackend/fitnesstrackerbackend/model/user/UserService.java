@@ -1,9 +1,9 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user;
 
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -12,9 +12,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    @Getter
-    @Setter
-    private User loggedInUser;
+
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -30,6 +28,23 @@ public class UserService {
 
     public User getLoggedInUserById(Integer id){
         return userRepository.findById(id).get();
+    }
+
+    public Integer getLoggedInUserId(){
+        return userRepository.findByEmail(getEmailFromSecurityContext()).orElseThrow().getId();
+    }
+
+    public User getLoggedInUser(){
+        return userRepository.findByEmail(getEmailFromSecurityContext()).orElseThrow();
+    }
+
+    public String getEmailFromSecurityContext(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        if (principal instanceof User) {
+            return ((User)principal).getEmail();
+        }
+        return principal.toString();
     }
 
 

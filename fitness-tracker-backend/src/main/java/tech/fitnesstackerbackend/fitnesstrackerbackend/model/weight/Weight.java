@@ -3,7 +3,10 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
@@ -27,6 +30,7 @@ public class Weight {
 
     @Column(nullable = false)
     private LocalDate recordedAt;
+
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
