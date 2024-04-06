@@ -2,6 +2,8 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 
@@ -23,6 +25,7 @@ public class WeightController {
 
     @GetMapping
     public List<WeightDTO> getWeight(){
+
         return weightService.getAllWeightForUser();
 
     }
