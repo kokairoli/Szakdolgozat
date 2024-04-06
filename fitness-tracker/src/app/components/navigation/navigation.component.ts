@@ -34,4 +34,9 @@ export class NavigationComponent implements OnInit {
   navigateTo(path: string): void {
     this.router.navigate([path]);
   }
+
+  logout() {
+    localStorage.removeItem('access_token');
+    this.router.navigate(['/welcome']);
+  }
 }

@@ -5,6 +5,8 @@ import { ContainerComponent } from './components/container/container.component';
 import { AuthGuard } from './authguard/auth.guard';
 import { HomeComponent } from './components/home/home.component';
 import { ProgressComponent } from './components/progress/progress.component';
+import { ExerciseComponent } from './components/exercise/exercise.component';
+import { WorkoutComponent } from './components/workout/workout.component';
 
 const routes: Routes = [
   {
@@ -18,6 +20,8 @@ const routes: Routes = [
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'progress', component: ProgressComponent },
+      { path: 'exercises', component: ExerciseComponent },
+      { path: 'workout', component: WorkoutComponent },
     ],
   },
 ];

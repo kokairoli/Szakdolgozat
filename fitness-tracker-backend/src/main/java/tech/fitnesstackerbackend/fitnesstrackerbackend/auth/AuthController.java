@@ -17,14 +17,24 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
+    @PostMapping("user/register")
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
     }
 
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
+    @PostMapping("user/login")
+    public ResponseEntity<AuthResponse> loginUser(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(authService.login(request));
+    }
+
+    @PostMapping("coach/register")
+    public ResponseEntity<AuthResponse> registerCoach(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("coach/login")
+    public ResponseEntity<AuthResponse> loginCoach(@RequestBody LoginRequest request){
         return ResponseEntity.ok(authService.login(request));
     }
 

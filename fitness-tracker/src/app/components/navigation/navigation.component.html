@@ -7,13 +7,27 @@
     Home
   </li>
   <li
-    (click)="navigateTo('progress')"
+    (click)="navigateTo('/workout')"
+    [nzSelected]="urlSegments[0] === 'workout'"
+    nz-menu-item
+  >
+    Workout
+  </li>
+  <li
+    (click)="navigateTo('/progress')"
     [nzSelected]="urlSegments[0] === 'progress'"
     nz-menu-item
   >
     Progress
   </li>
-  <li [nzSelected]="urlSegments[0] === 'goals'" nz-menu-item>Goals</li>
-  <li [nzSelected]="urlSegments[0] === 'exercises'" nz-menu-item>Exercises</li>
+
+  <li
+    (click)="navigateTo('/exercises')"
+    [nzSelected]="urlSegments[0] === 'exercises'"
+    nz-menu-item
+  >
+    Exercises
+  </li>
   <li [nzSelected]="urlSegments[0] === 'Coaches'" nz-menu-item>Coaches</li>
+  <li style="float: right" (click)="logout()" nz-menu-item>Logout</li>
 </ul>

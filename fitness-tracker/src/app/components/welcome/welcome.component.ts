@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { UserService } from 'src/app/services/user.service';
 import { AuthResponseDTO } from 'src/app/model/UserDTOs/AuthResponseDTO';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
@@ -36,7 +37,10 @@ export class WelcomeComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private readonly router: Router
+  ) {}
 
   register() {
     localStorage.removeItem('access_token');
@@ -49,6 +53,7 @@ export class WelcomeComponent {
       })
       .subscribe((response: AuthResponseDTO) => {
         localStorage.setItem('access_token', response.token);
+        this.router.navigate(['/home']);
       });
   }
 
@@ -62,6 +67,7 @@ export class WelcomeComponent {
         })
         .subscribe((response: AuthResponseDTO) => {
           localStorage.setItem('access_token', response.token);
+          this.router.navigate(['/home']);
         });
     }
   }
