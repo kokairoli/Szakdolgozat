@@ -3,7 +3,7 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,23 +12,23 @@ import java.util.List;
 public class WeightService {
 
     private final WeightRepository weightRepository;
-    private final UserService userService;
+    private final ClientService clientService;
 
     @Autowired
-    public WeightService(WeightRepository weightRepository,UserService userService) {
+    public WeightService(WeightRepository weightRepository,ClientService clientService) {
         this.weightRepository = weightRepository;
-        this.userService = userService;
+        this.clientService = clientService;
     }
 
     public List<WeightDTO> getAllWeightForUser(){
-        return weightRepository.findByUserId(userService.getLoggedInUserId()).stream().map((element)->translateWeightToWeightDTO(element)).toList();
+        return weightRepository.findByClientId(clientService.getLoggedInUserId()).stream().map(this::translateWeightToWeightDTO).toList();
     }
 
-    public WeightDTO addWeightToUser(WeightDTO weightDTO){
+    public WeightDTO addWeightToClient(WeightDTO weightDTO){
 
         weightDTO.setRecordedAt(LocalDate.now());
         Weight weight = new Weight(weightDTO.getWeight(), weightDTO.getRecordedAt());
-        weight.setUser(userService.getLoggedInUser());
+        weight.setClient(clientService.getLoggedInClient());
         Weight savedData = weightRepository.save(weight);
 
         return translateWeightToWeightDTO(savedData);

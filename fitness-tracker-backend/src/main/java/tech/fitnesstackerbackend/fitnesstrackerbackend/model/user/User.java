@@ -2,7 +2,6 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,18 +12,22 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@MappedSuperclass
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue
     private Integer id;
+
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
 
 

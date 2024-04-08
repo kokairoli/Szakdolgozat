@@ -4,6 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Role {
-    USER,
+    CLIENT,
     COACH;
 }

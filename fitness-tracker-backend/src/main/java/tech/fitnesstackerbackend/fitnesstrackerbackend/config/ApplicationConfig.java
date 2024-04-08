@@ -12,19 +12,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserRepository;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientRepository;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachRepository;
+
+import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository userRepository;
+    private final ClientRepository clientRepository;
+    private final CoachRepository coachRepository;
     @Bean
     public UserDetailsService userDetailsService(){
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+                Optional<Client> client = clientRepository.findByEmail(username);
+                if (client.isPresent()){
+                    return client.get();
+                }else{
+                    return coachRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
+                }
             }
         };
     }
