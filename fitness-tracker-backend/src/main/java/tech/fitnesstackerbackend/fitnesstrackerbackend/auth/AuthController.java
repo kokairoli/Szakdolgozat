@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -15,27 +14,26 @@ import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
-    @PostMapping("user/register")
-    public ResponseEntity<AuthResponse> registerUser(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(authService.register(request));
+    @PostMapping("client/register")
+    public ResponseEntity<AuthResponse> registerClient(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authService.registerClient(request));
     }
 
 
-    @PostMapping("user/login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody LoginRequest request){
-        return ResponseEntity.ok(authService.login(request));
+    @PostMapping("client/login")
+    public ResponseEntity<AuthResponse> loginClient(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(authService.loginClient(request));
     }
 
     @PostMapping("coach/register")
     public ResponseEntity<AuthResponse> registerCoach(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(authService.register(request));
+        return ResponseEntity.ok(authService.registerCoach(request));
     }
 
     @PostMapping("coach/login")
     public ResponseEntity<AuthResponse> loginCoach(@RequestBody LoginRequest request){
-        return ResponseEntity.ok(authService.login(request));
+        return ResponseEntity.ok(authService.loginCoach(request));
     }
 
 

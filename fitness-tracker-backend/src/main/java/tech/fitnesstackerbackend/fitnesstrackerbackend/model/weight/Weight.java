@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
 
 import java.time.LocalDate;
 
@@ -33,10 +33,10 @@ public class Weight {
 
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "client_id",referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
-    private User user;
+    private Client client;
 
     public Weight(Double weight, LocalDate recordedAt) {
         this.weight = weight;

@@ -7,59 +7,70 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.config.JwtService;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.Role;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserRepository;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientRepository;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientService;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachRepository;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachService;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserRepository repository;
+    private final CoachRepository coachRepository;
+    private final ClientRepository clientRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
-    private final UserService userService;
+    private final CoachService coachService;
+    private final ClientService clientService;
 
-    public AuthResponse register(RegisterRequest request) {
-        if (userService.userExists(request.getEmail())){
-            return AuthResponse.builder().errorMessage("Email already taken").build();
-        }
 
-        User user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())).role(Role.USER).build();
-        repository.save(user);
-        String token = jwtService.generateToken(user);
-        return AuthResponse.builder().token(token).build();
-    }
 
     public AuthResponse registerCoach(RegisterRequest request) {
-        if (userService.userExists(request.getEmail())){
-            return AuthResponse.builder().errorMessage("Email already taken").build();
+        if (emailTakenInClientOrCoach(request.getEmail())){
+            return throwEmailTakenError();
         }
 
-        User user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword())).role(Role.USER).build();
-        repository.save(user);
-        String token = jwtService.generateToken(user);
+
+        Coach coach = new Coach();
+        coach.setFirstName(request.getFirstName());
+        coach.setLastName(request.getLastName());
+        coach.setEmail(request.getEmail());
+        coach.setPassword(passwordEncoder.encode(request.getPassword()));
+        coach.setRole(Role.COACH);
+        coachRepository.save(coach);
+        String token = jwtService.generateToken(coach);
         return AuthResponse.builder().token(token).build();
     }
 
-    public AuthResponse loginUser(LoginRequest request) {
+    public AuthResponse registerClient(RegisterRequest request) {
+        if (emailTakenInClientOrCoach(request.getEmail())){
+            return throwEmailTakenError();
+        }
+
+
+        Client client = new Client();
+        client.setFirstName(request.getFirstName());
+        client.setLastName(request.getLastName());
+        client.setEmail(request.getEmail());
+        client.setPassword(passwordEncoder.encode(request.getPassword()));
+        client.setRole(Role.CLIENT);
+        clientRepository.save(client);
+        String token = jwtService.generateToken(client);
+        return AuthResponse.builder().token(token).build();
+    }
+
+    public AuthResponse loginClient(LoginRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        User user = repository.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtService.generateToken(user);
+        Client client = clientRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtService.generateToken(client);
         return AuthResponse.builder().token(token).build();
     }
 
@@ -70,8 +81,16 @@ public class AuthService {
                         request.getPassword()
                 )
         );
-        User user = repository.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtService.generateToken(user);
+        Coach coach = coachRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtService.generateToken(coach);
         return AuthResponse.builder().token(token).build();
+    }
+
+    public boolean emailTakenInClientOrCoach(String email){
+        return coachService.userExists(email) || clientService.userExists(email);
+    }
+
+    public AuthResponse throwEmailTakenError(){
+        return AuthResponse.builder().errorMessage("Email already taken").build();
     }
 }

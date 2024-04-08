@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.ExerciseSet;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class Workout {
 
     private boolean coachWorkout;
 
+    private boolean finished;
+
     private LocalDateTime scheduled;
 
 
@@ -55,16 +58,16 @@ public class Workout {
     private List<ExerciseSet> sets = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id",referencedColumnName = "id",nullable = false)
+    @JoinColumn(name = "client_id",referencedColumnName = "id",nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User user;
+    private Client client;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "coach_id",referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User coach;
+    private Coach coach;
 
 
 

@@ -2,10 +2,7 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.weight;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 
 import java.util.List;
 
@@ -15,12 +12,10 @@ public class WeightController {
 
 
     private final WeightService weightService;
-    private final UserService userService;
 
     @Autowired
-    public WeightController(WeightService weightService,UserService userService) {
+    public WeightController(WeightService weightService) {
         this.weightService = weightService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -32,6 +27,6 @@ public class WeightController {
 
     @PostMapping
     public WeightDTO addWeightToUser(@RequestBody WeightDTO weightDTO){
-        return weightService.addWeightToUser(weightDTO);
+        return weightService.addWeightToClient(weightDTO);
     }
 }

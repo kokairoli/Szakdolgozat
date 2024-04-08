@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface WeightRepository extends JpaRepository<Weight,Long> {
-    List<Weight> findByUserId(Integer userId);
+    List<Weight> findByClientId(Integer clientId);
 }
