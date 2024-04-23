@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ProgressComponent } from './components/progress/progress.component';
 import { ExerciseComponent } from './components/exercise/exercise.component';
 import { WorkoutComponent } from './components/workout/workout.component';
+import { CoachesComponent } from './components/coaches/coaches.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
       { path: 'progress', component: ProgressComponent },
       { path: 'exercises', component: ExerciseComponent },
       { path: 'workout', component: WorkoutComponent },
+      { path: 'coaches', component: CoachesComponent },
     ],
   },
 ];

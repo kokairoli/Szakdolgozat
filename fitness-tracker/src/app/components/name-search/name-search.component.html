@@ -1,0 +1,14 @@
+<nz-card style="width: 300px">
+  <form class="form" [formGroup]="searchForm">
+    <input
+      nz-input
+      type="text"
+      formControlName="name"
+      placeholder="Search by name"
+    />
+    <button (click)="onSearch()" nz-button nzType="primary">
+      <span nz-icon nzType="search"></span>
+      Search
+    </button>
+  </form>
+</nz-card>

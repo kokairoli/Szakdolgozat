@@ -1,1 +1,100 @@
-<p>exercise works!</p>
+<div class="exercise-container">
+  <nz-card>
+    <form class="form" [formGroup]="searchForm">
+      <input
+        nz-input
+        type="text"
+        formControlName="name"
+        placeholder="Workout name"
+      />
+
+      <nz-select
+        [nzMaxTagPlaceholder]="tagPlaceHolder"
+        nzMode="multiple"
+        nzPlaceHolder="Mechanics"
+        formControlName="mechanics"
+      >
+        <nz-option
+          *ngFor="let item of filterDropDowns?.mechanics"
+          [nzLabel]="item"
+          [nzValue]="item"
+        ></nz-option>
+      </nz-select>
+      <ng-template #tagPlaceHolder>and more selected</ng-template>
+      <nz-select
+        [nzMaxTagPlaceholder]="tagPlaceHolder"
+        nzMode="multiple"
+        nzPlaceHolder="Target muscle group"
+        formControlName="muscleGroup"
+      >
+        <nz-option
+          *ngFor="let item of filterDropDowns?.muscleGroups"
+          [nzLabel]="item"
+          [nzValue]="item"
+        ></nz-option>
+      </nz-select>
+      <nz-select
+        [nzMaxTagPlaceholder]="tagPlaceHolder"
+        nzMode="multiple"
+        nzPlaceHolder="Difficulty"
+        formControlName="difficulty"
+      >
+        <nz-option
+          *ngFor="let item of filterDropDowns?.difficultys"
+          [nzLabel]="item"
+          [nzValue]="item"
+        ></nz-option>
+      </nz-select>
+      <nz-select
+        [nzMaxTagPlaceholder]="tagPlaceHolder"
+        nzMode="multiple"
+        nzPlaceHolder="Equipment"
+        formControlName="equipment"
+      >
+        <nz-option
+          *ngFor="let item of filterDropDowns?.equipments"
+          [nzLabel]="item"
+          [nzValue]="item"
+        ></nz-option>
+      </nz-select>
+      <button (click)="onSearch()" nz-button nzType="primary">
+        <span nz-icon nzType="search"></span>
+        Search
+      </button>
+    </form>
+  </nz-card>
+  <div style="max-height: 100%; max-width: 100%">
+    <nz-table
+      [nzScroll]="{ y: 'calc(100vh - 310px)' }"
+      nzSize="middle"
+      #exerciseTable
+      [nzData]="filteredExerciseData"
+    >
+      <thead>
+        <tr>
+          <th
+            *ngFor="let column of displayedColumns"
+            [nzSortOrder]="column.sortOrder"
+            [nzSortFn]="column.sortFn"
+            [nzSortDirections]="column.sortDirections"
+          >
+            {{ column.name }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of exerciseTable.data">
+          <td>{{ data.name }}</td>
+          <td>{{ data.mechanics }}</td>
+          <td>{{ data.targetMuscleGroup }}</td>
+          <td>
+            {{ data.difficulty }}
+          </td>
+          <td>
+            {{ data.equipment ?? "None" }}
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

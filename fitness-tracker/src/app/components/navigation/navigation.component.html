@@ -1,4 +1,4 @@
-<ul nz-menu nzMode="horizontal">
+<ul nz-menu style="height: 8.5vh" nzMode="horizontal">
   <li
     (click)="navigateTo('/home')"
     [nzSelected]="urlSegments[0] === 'home'"
@@ -28,6 +28,12 @@
   >
     Exercises
   </li>
-  <li [nzSelected]="urlSegments[0] === 'Coaches'" nz-menu-item>Coaches</li>
+  <li
+    (click)="navigateTo('/coaches')"
+    [nzSelected]="urlSegments[0] === 'Coaches'"
+    nz-menu-item
+  >
+    Coaches
+  </li>
   <li style="float: right" (click)="logout()" nz-menu-item>Logout</li>
 </ul>

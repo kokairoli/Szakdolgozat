@@ -1,1 +1,34 @@
-<p>workout works!</p>
+<button (click)="showCreateNewWorkout()" nz-button nzType="primary">
+  Add new workout
+</button>
+
+<app-workout-edit
+  [isVisible]="createNewWorkoutVisible"
+  [title]="'Create new workout'"
+  [mode]="'create'"
+  (dataChanged)="addNewWorkout($event)"
+  (closeModal)="closeCreateNewWorkout()"
+></app-workout-edit>
+<h2>My own workouts</h2>
+<nz-table #ownWorkoutsTable [nzData]="workoutsData">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Comment</th>
+      <th>Number of exercises</th>
+      <th>Coach</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of ownWorkoutsTable.data">
+      <td>{{ data.name }}</td>
+      <td>{{ data.comment }}</td>
+      <td>{{ data.sets.length }}</td>
+      <td>
+        {{ data.coach ? data.coach.firstName + " " + data.coach.lastName : "" }}
+      </td>
+      <td><a (click)="deleteWorkout(data.id)">Delete</a></td>
+    </tr>
+  </tbody>
+</nz-table>

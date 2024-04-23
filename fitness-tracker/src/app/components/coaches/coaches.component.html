@@ -1,0 +1,60 @@
+<div class="coach-container">
+  <app-create-request
+    [title]="
+      mode === 'create'
+        ? 'Create coaching request'
+        : 'Edit coaching request message'
+    "
+    [coach]="selectedCoach"
+    [isVisible]="isVisible"
+    (closeModal)="isVisible = false"
+    (dataChanged)="handleSave()"
+  ></app-create-request>
+  <div>
+    <app-name-search (nameSearched)="filterCoaches($event)"></app-name-search>
+  </div>
+  <h1>Coaches</h1>
+  <div class="cards-container">
+    <nz-card
+      *ngFor="let coach of filteredCoaches"
+      class="card"
+      [nzBordered]="true"
+    >
+      <div class="card-content">
+        <div class="card-title">
+          <h2>{{ coach.firstName + " " + coach.lastName }}</h2>
+        </div>
+        <div class="card-details">
+          <span>Number of clients</span>
+          <span>{{ coach.numberOfClients }}</span>
+        </div>
+        <div class="action-button-container">
+          <a *ngIf="coach.coachRequest" style="text-align: center"
+            >Request was sent</a
+          >
+          <div *ngIf="!coach.coachRequest">&nbsp;</div>
+          <div class="button-container">
+            <button
+              *ngIf="!coach.coachRequest"
+              (click)="openCreateRequestWindow(coach)"
+              nz-button
+              nzType="primary"
+            >
+              Send coaching request
+            </button>
+
+            <button
+              (click)="deleteRequest(coach.coachRequest.id)"
+              *ngIf="coach.coachRequest"
+              nz-button
+              nzType="default"
+              style="width: fit-content"
+            >
+              Delete coach request
+            </button>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</div>
