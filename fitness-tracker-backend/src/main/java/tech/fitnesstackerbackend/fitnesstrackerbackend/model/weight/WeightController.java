@@ -25,6 +25,11 @@ public class WeightController {
 
     }
 
+    @GetMapping("/latest")
+    public WeightDTO getClientLatestWeight(){
+        return weightService.getUserLatestWeight();
+    }
+
     @PostMapping
     public WeightDTO addWeightToUser(@RequestBody WeightDTO weightDTO){
         return weightService.addWeightToClient(weightDTO);

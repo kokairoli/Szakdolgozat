@@ -25,13 +25,13 @@ public class Exercise {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     @Column(nullable = false)
-    private String targetMuscleGroup;
+    @Enumerated(EnumType.STRING)
+    private MuscleGroup targetMuscleGroup;
     private String equipment;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Mechanics Mechanics;
-
+    private Mechanics mechanics;
 
 
 

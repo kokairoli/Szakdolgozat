@@ -35,15 +35,15 @@ public class WorkoutService {
 
 
 
-    public List<Workout> getAllWorkoutForClient(){
-        return workoutRepository.findAllByClientId(clientService.getLoggedInUserId());
+    public List<WorkoutDTO> getAllWorkoutForClient(){
+        return workoutRepository.findAllByClientId(clientService.getLoggedInUserId()).stream().map(this::translateWorkoutToWorkoutDTO).toList();
     }
 
-    public Workout getWorkoutForClient(Long id){
-        return workoutRepository.findById(id).orElseThrow();
+    public WorkoutDTO getWorkoutForClient(Long id){
+        return this.translateWorkoutToWorkoutDTO(workoutRepository.findById(id).orElseThrow());
     }
 
-    public Workout createWorkout(CreateWorkoutDTO createWorkoutDTO){
+    public WorkoutDTO createWorkout(CreateWorkoutDTO createWorkoutDTO){
         Workout w = new Workout();
 
         w.setClient(clientService.getLoggedInClient());
@@ -56,10 +56,10 @@ public class WorkoutService {
             exerciseSetList.add(newExerciseSet);
         }
         w.setSets(exerciseSetList);
-        return workoutRepository.save(w);
+        return translateWorkoutToWorkoutDTO(workoutRepository.save(w));
     }
 
-    public Workout createWorkoutFromCoachToUser(CreateWorkoutCoachDTO createWorkoutCoachDTO){
+    public WorkoutDTO createWorkoutFromCoachToUser(CreateWorkoutCoachDTO createWorkoutCoachDTO){
         Workout w = new Workout();
 
         w.setClient(clientService.getClientById(createWorkoutCoachDTO.getUserId()));
@@ -73,59 +73,66 @@ public class WorkoutService {
             exerciseSetList.add(newExerciseSet);
         }
         w.setSets(exerciseSetList);
-        return workoutRepository.save(w);
+        return translateWorkoutToWorkoutDTO(workoutRepository.save(w));
     }
 
 
 
-    public Workout addSetToWorkout(AddExerciseSetDTO addExerciseSetDTO){
+    public WorkoutDTO addSetToWorkout(AddExerciseSetDTO addExerciseSetDTO){
         Optional<Workout> w = workoutRepository.findById(addExerciseSetDTO.getWorkoutId());
 
         if (w.isPresent()){
 
             w.get().getSets().add(exerciseSetService.createSet(addExerciseSetDTO.getCreateExerciseSetDTO()));
-            return workoutRepository.save(w.get());
+            return translateWorkoutToWorkoutDTO(workoutRepository.save(w.get()));
         }
 
         throw new IllegalArgumentException();
     }
 
-    public Workout addCommentToWorkout(AddCommentDTO addCommentDTO){
+    public WorkoutDTO addCommentToWorkout(AddCommentDTO addCommentDTO){
         Workout workout = workoutRepository.findById(addCommentDTO.getId()).orElseThrow();
         workout.setComment(addCommentDTO.getComment());
-        return workoutRepository.save(workout);
+        return translateWorkoutToWorkoutDTO(workoutRepository.save(workout));
     }
 
-    public List<Workout> getAllWorkoutFromCoachByClientId(Integer clientId){
-        return workoutRepository.findByCoachAndClientId(coachService.getLoggedInUserId(),clientId);
+
+
+    public List<WorkoutDTO> getAllWorkoutFromCoachByClientId(Integer clientId){
+        return workoutRepository.findByCoachAndClientId(coachService.getLoggedInUserId(),clientId).stream().map(this::translateWorkoutToWorkoutDTO).toList();
     }
 
-    public Workout finishWorkout(Long workoutId){
+    public WorkoutDTO finishWorkout(Long workoutId){
         Workout workout = workoutRepository.findById(workoutId).orElseThrow();
         workout.setFinished(true);
-        return workoutRepository.save(workout);
+        return translateWorkoutToWorkoutDTO(workoutRepository.save(workout));
     }
 
-    public Workout cancelFinishedWorkout(Long workoutId){
+    public WorkoutDTO cancelFinishedWorkout(Long workoutId){
         Workout workout = workoutRepository.findById(workoutId).orElseThrow();
         workout.setFinished(false);
-        return workoutRepository.save(workout);
+        return translateWorkoutToWorkoutDTO(workoutRepository.save(workout));
     }
 
     public void deleteWorkout(Long workoutId){
         workoutRepository.delete(workoutRepository.findById(workoutId).orElseThrow());
     }
 
-    public Workout removeSetFromWorkout(Long workoutId,Long exerciseSetId){
+    public WorkoutDTO removeSetFromWorkout(Long workoutId,Long exerciseSetId){
         Optional<Workout> workout = workoutRepository.findById(workoutId);
         ExerciseSet exerciseSet = exerciseSetService.getExerciseSet(exerciseSetId);
 
         if (workout.isPresent()){
             workout.get().getSets().remove(exerciseSet);
 
-            return workoutRepository.save(workout.get());
+            return translateWorkoutToWorkoutDTO(workoutRepository.save(workout.get()));
         }
 
         throw new IllegalArgumentException();
     }
+
+    public WorkoutDTO translateWorkoutToWorkoutDTO(Workout workout){
+        return new WorkoutDTO(workout.getId(),workout.getName(), workout.getComment(), workout.isCoachWorkout(), workout.isFinished(),workout.getSets(), coachService.translateCoachToUserDTO(workout.getCoach()));
+    }
+
 }

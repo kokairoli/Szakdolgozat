@@ -35,8 +35,17 @@ public class WeightService {
     }
 
     public WeightDTO translateWeightToWeightDTO(Weight weight){
-        return new WeightDTO(weight.getWeight(),weight.getRecordedAt());
+        return new WeightDTO(weight.getId(),weight.getWeight(),weight.getRecordedAt());
     }
+
+    public WeightDTO getUserLatestWeight(){
+        return translateWeightToWeightDTO(weightRepository.findLatestByClientId(clientService.getLoggedInUserId()));
+    }
+
+    public void deleteWeight(Long weightId){
+        weightRepository.delete(weightRepository.findById(weightId).orElseThrow());
+    }
+
 
 
 

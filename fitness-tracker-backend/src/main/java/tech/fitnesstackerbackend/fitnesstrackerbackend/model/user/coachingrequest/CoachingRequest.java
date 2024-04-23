@@ -11,6 +11,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
 
+import java.util.Date;
+
 @Entity
 @Table
 @Data
@@ -29,6 +31,10 @@ public class CoachingRequest {
     private boolean accepted;
 
     private String message;
+
+
+    @Column(nullable = false)
+    private Date created_at;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "client_id",referencedColumnName = "id",nullable = false,unique = true)

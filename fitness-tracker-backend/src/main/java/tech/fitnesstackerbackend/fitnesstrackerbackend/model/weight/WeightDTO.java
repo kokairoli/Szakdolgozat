@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class WeightDTO {
+    private Long id;
     private Double weight;
     private LocalDate recordedAt;
 }

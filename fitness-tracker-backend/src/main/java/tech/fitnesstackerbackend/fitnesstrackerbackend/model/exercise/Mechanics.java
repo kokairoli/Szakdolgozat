@@ -1,7 +1,8 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.exercise;
 
 public enum Mechanics {
-    TEST("TEST");
+    COMPOUND("Compound"),
+    ISOLATION("Isolation");
 
     private String name;
 

@@ -62,7 +62,7 @@ public class ClientService extends UserService {
     public void deletedCoach(){}
 
     public UserDTO translateClientToUserDTO(Client client){
-        return new UserDTO(client.getFirstName(),client.getLastName(),client.getEmail());
+        return new UserDTO(client.getId(), client.getFirstName(),client.getLastName(),client.getEmail());
     }
 
 
