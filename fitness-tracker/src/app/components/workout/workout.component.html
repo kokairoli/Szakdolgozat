@@ -24,12 +24,13 @@
 
   <app-workout-edit
     [isVisible]="createNewWorkoutVisible"
-    [title]="'Create new workout'"
+    [title]="selectedWorkout ? 'Edit workout' : 'Create new workout'"
     [workout]="selectedWorkout"
     (dataChanged)="dataChanged($event)"
     (closeModal)="closeWorkoutEdit()"
   ></app-workout-edit>
-  <div class="table-view" *ngIf="tableView">
+  @if (tableView) {
+  <div class="table-view">
     <h2>My own workouts</h2>
     <nz-table #ownWorkoutsTable [nzData]="workoutsData">
       <thead>
@@ -86,6 +87,105 @@
       </tbody>
     </nz-table>
   </div>
+  }@else{
+  <div class="calendar-view">
+    <div class="calendar-header">
+      <div class="calendar-button-group">
+        <button
+          mwlCalendarPreviousView
+          nz-button
+          nzType="default"
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Previous
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          Today
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          Next
+        </button>
+      </div>
 
-  <div class="calendar-view"></div>
+      <div>
+        <h3>{{ viewDate | calendarDate : view + "ViewTitle" : "en" }}</h3>
+      </div>
+      <div class="calendar-button-group">
+        <button
+          class="btn btn-primary"
+          nz-button
+          [nzType]="view === CalendarView.Month ? 'primary' : 'default'"
+          (click)="setView(CalendarView.Month)"
+          [class.active]="view === CalendarView.Month"
+        >
+          Month
+        </button>
+        <button
+          class="btn btn-primary"
+          nz-button
+          [nzType]="view === CalendarView.Week ? 'primary' : 'default'"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+        >
+          Week
+        </button>
+        <button
+          class="btn btn-primary"
+          nz-button
+          [nzType]="view === CalendarView.Day ? 'primary' : 'default'"
+          (click)="setView(CalendarView.Day)"
+          [class.active]="view === CalendarView.Day"
+        >
+          Day
+        </button>
+      </div>
+    </div>
+
+    <div [ngSwitch]="view">
+      <mwl-calendar-month-view
+        *ngSwitchCase="CalendarView.Month"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        [activeDayIsOpen]="activeDayIsOpen"
+        (dayClicked)="dayClicked($event.day)"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view
+        *ngSwitchCase="CalendarView.Week"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view
+        *ngSwitchCase="CalendarView.Day"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
+      </mwl-calendar-day-view>
+    </div>
+  </div>
+  }
 </div>
