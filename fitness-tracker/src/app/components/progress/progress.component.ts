@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 
 import {
   ApexAxisChartSeries,
@@ -50,6 +50,8 @@ export class ProgressComponent implements OnInit {
   private readonly weightService = inject(WeightService);
   private readonly goalService = inject(GoalService);
   private readonly workoutService = inject(WorkoutService);
+
+  @ViewChild('chartObj') chart?: ChartComponent;
 
   weights: WeightDTO[] = [];
   currentWeight?: WeightDTO | null;
@@ -114,6 +116,8 @@ export class ProgressComponent implements OnInit {
   getAllWeightForUser() {
     this.weightService.getWeightsForUser().subscribe((weights) => {
       this.weights = weights;
+      console.log(weights);
+
       this.chartOptions.series = [
         { name: 'Weight', data: weights.map((weight) => weight.weight) },
       ];
@@ -126,6 +130,10 @@ export class ProgressComponent implements OnInit {
           })
         ),
       };
+      this.chart?.updateOptions({
+        series: this.chartOptions.series,
+        xaxis: this.chartOptions.xaxis,
+      });
     });
   }
 
