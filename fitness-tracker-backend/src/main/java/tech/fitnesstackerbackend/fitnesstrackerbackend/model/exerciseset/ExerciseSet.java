@@ -30,7 +30,7 @@ public class ExerciseSet {
     @Column(nullable = false)
     private Integer numberOfSets;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "exercise_id", referencedColumnName = "id",nullable = false)
     @JsonManagedReference
     private Exercise exercise;

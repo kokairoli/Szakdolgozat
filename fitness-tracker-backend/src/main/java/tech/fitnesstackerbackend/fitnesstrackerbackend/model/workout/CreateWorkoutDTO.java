@@ -9,5 +9,6 @@ import java.util.List;
 public class CreateWorkoutDTO {
     private String name;
     private String comment;
+    private String scheduled;
     private List<CreateExerciseSetDTO> createWorkoutSetDTOList;
 }

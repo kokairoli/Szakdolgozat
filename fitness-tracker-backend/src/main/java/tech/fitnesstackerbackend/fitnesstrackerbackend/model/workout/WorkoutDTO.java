@@ -5,6 +5,7 @@ import lombok.Data;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.ExerciseSet;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,5 +18,6 @@ public class WorkoutDTO {
     private boolean finished;
     private List<ExerciseSet> sets;
     private UserDTO coach;
+    private String scheduled;
 
 }

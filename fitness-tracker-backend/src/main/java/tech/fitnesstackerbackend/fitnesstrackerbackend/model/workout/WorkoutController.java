@@ -26,14 +26,10 @@ public class WorkoutController {
         return workoutService.createWorkoutFromCoachToUser(createWorkoutCoachDTO);
     }
 
-    @PatchMapping("set/add")
-    public WorkoutDTO addExerciseToWorkout(@RequestBody AddExerciseSetDTO addExerciseSetDTO){
-        return workoutService.addSetToWorkout(addExerciseSetDTO);
-    }
 
-    @PatchMapping("set/remove")
-    public WorkoutDTO removeExerciseFromWorkout(@RequestBody RemoveExerciseSetDTO removeExerciseSetDTO){
-        return workoutService.removeSetFromWorkout(removeExerciseSetDTO.getWorkoutId(), removeExerciseSetDTO.getWorkoutSetId());
+    @PatchMapping("edit")
+    public WorkoutDTO updateWorkout(@RequestBody EditWorkoutDTO editWorkoutDTO){
+        return workoutService.updateWorkout(editWorkoutDTO);
     }
 
     @PatchMapping("finish/{workoutId}")
@@ -62,6 +58,11 @@ public class WorkoutController {
     @GetMapping("client/{workoutId}")
     public WorkoutDTO getWorkoutForUser(@PathVariable String workoutId){
         return workoutService.getWorkoutForClient(Long.parseLong(workoutId));
+    }
+
+    @GetMapping("client/currentMonth")
+    public List<WorkoutDTO> getWorkoutForClientCurrentMonth(){
+        return workoutService.getWorkoutForClientCurrentMonth();
     }
 
     @GetMapping("coach/{clientId}")

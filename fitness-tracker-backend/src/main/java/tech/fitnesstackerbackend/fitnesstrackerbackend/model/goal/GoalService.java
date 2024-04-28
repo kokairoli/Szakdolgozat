@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientService;
 
+import java.util.Optional;
+
 @Service
 public class GoalService {
     private final GoalRepository goalRepository;
@@ -20,7 +22,7 @@ public class GoalService {
 
 
 
-    public Goal getGoalForClient(){
+    public Optional<Goal> getGoalForClient(){
         return goalRepository.findByClientId(clientService.getLoggedInUserId());
     }
 }

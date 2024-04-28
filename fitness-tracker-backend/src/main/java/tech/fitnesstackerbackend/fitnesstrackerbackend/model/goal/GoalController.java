@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/goal")
+@RequestMapping("api/v1/goal")
 public class GoalController {
 
     private final GoalService goalService;
@@ -18,7 +20,7 @@ public class GoalController {
     }
 
     @GetMapping
-    public Goal getGoalOfClient(){
+    public Optional<Goal> getGoalOfClient(){
         return goalService.getGoalForClient();
     }
 }

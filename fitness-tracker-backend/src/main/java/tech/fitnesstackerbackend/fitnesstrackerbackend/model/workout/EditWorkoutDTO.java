@@ -2,8 +2,7 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout;
 
 
 import lombok.Data;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.ExerciseSet;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserDTO;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.EditExerciseSetDTO;
 
 import java.util.List;
 
@@ -12,8 +11,7 @@ public class EditWorkoutDTO {
     private Long id;
     private String name;
     private String comment;
-    private boolean coachWorkout;
-    private boolean finished;
-    private List<ExerciseSet> sets;
-    private UserDTO coach;
+    private String scheduled;
+    private List<EditExerciseSetDTO> sets;
+    private List<Long> forDeleteSetIds;
 }

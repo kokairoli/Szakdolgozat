@@ -11,5 +11,6 @@ public class CreateWorkoutCoachDTO {
     private Integer userId;
     private String name;
     private String comment;
+    private String scheduled;
     private List<CreateExerciseSetDTO> createWorkoutSetDTOList;
 }

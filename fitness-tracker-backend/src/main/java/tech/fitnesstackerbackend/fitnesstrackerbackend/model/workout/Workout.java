@@ -50,9 +50,8 @@ public class Workout {
             inverseJoinColumns = @JoinColumn(name = "exercise_id",referencedColumnName = "id")
     )*/
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="workout_id",referencedColumnName = "id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
     @Column(nullable = true)
     private List<ExerciseSet> sets = new ArrayList<>();
