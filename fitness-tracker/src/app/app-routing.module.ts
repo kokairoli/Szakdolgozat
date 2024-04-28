@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { ContainerComponent } from './components/container/container.component';
-import { AuthGuard } from './authguard/auth.guard';
+import { AuthGuard } from './authguard/authentication-guard.service';
 import { HomeComponent } from './components/home/home.component';
 import { ProgressComponent } from './components/progress/progress.component';
 import { ExerciseComponent } from './components/exercise/exercise.component';

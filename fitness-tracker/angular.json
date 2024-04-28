@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "fitness-tracker:build:production"
+              "buildTarget": "fitness-tracker:build:production"
             },
             "development": {
-              "browserTarget": "fitness-tracker:build:development"
+              "buildTarget": "fitness-tracker:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fitness-tracker:build"
+            "buildTarget": "fitness-tracker:build"
           }
         },
         "test": {
