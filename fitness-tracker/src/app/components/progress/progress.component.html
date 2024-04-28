@@ -1,1 +1,93 @@
-<p>progress works!</p>
+<div class="progress-container">
+  <div class="chart-container">
+    <nz-modal
+      [(nzVisible)]="addWeightVisible"
+      (nzOnCancel)="addWeightVisible = false"
+      nzTitle="Add weight(kg)"
+      [nzStyle]="{ width: '15vw' }"
+      [nzFooter]="modalFooter"
+      [nzContent]="modalContent"
+    >
+      <ng-template #modalContent>
+        <div
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <input
+            type="number"
+            style="width: 50%"
+            nz-input
+            min="0"
+            max="635"
+            [formControl]="addWeightFormControl"
+          />
+        </div>
+      </ng-template>
+      <ng-template #modalFooter>
+        <button
+          nz-button
+          nzType="primary"
+          (click)="handleNewWeight()"
+          [nzLoading]="isLoading"
+          [disabled]="addWeightFormControl.invalid"
+        >
+          Add
+        </button>
+        <button (click)="addWeightVisible = false" nz-button>Cancel</button>
+      </ng-template>
+    </nz-modal>
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [title]="chartOptions.title"
+      [xaxis]="chartOptions.xaxis"
+    ></apx-chart>
+  </div>
+  <div class="weight-data-container">
+    <div class="weight-button-container">
+      <button nz-button nzType="primary" (click)="addWeightVisible = true">
+        Add weight
+      </button>
+    </div>
+    <div class="block">
+      <h3>Target weight</h3>
+      <div></div>
+      <h3>Current weight</h3>
+      <div>{{ currentWeight?.weight }}</div>
+      <h3>Smallest weight</h3>
+      <div></div>
+      <h3>Biggest weight</h3>
+      <div></div>
+      <h3>Start weight</h3>
+      <div></div>
+    </div>
+  </div>
+  <div class="calendar-container"></div>
+  <div class="workout-statistics-container">
+    <div class="current-month">
+      <h2>This month</h2>
+      <div class="row">
+        <h3>Target exercise count</h3>
+        <div>{{ clientGoal?.targetWorkoutCount }}</div>
+      </div>
+      <div class="row">
+        <h3>Planned workouts</h3>
+        <div>{{ currentMonthWorkouts.length }}</div>
+      </div>
+      <div class="row">
+        <h3>Finished workouts</h3>
+        <div>{{ currentMonthWorkouts.length }}</div>
+      </div>
+    </div>
+    <div class="all-time">
+      <h2>All time</h2>
+      <div class="row">
+        <h3>Finished workouts</h3>
+        <div>{{ finishedWorkouts }}</div>
+      </div>
+      <div class="row">
+        <h3>Planned workouts</h3>
+        <div>{{ allWorkouts.length }}</div>
+      </div>
+    </div>
+  </div>
+</div>

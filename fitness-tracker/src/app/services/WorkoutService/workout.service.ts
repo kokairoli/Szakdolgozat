@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CreateWorkoutDTO } from '../model/WorkoutDTOs/CreateWorkoutDTO';
-import { WorkoutDTO } from '../model/WorkoutDTOs/WorkoutDTO';
+import { CreateWorkoutDTO } from '../../model/WorkoutDTOs/CreateWorkoutDTO';
+import { WorkoutDTO } from '../../model/WorkoutDTOs/WorkoutDTO';
 import { Observable } from 'rxjs';
-import { environment } from '../environment/environment';
-import { RemoveExerciseSetDTO } from '../model/WorkoutDTOs/RemoveExerciseSetDTO';
+import { environment } from '../../environment/environment';
+import { RemoveExerciseSetDTO } from '../../model/WorkoutDTOs/RemoveExerciseSetDTO';
+import { EditWorkoutDTO } from 'src/app/model/WorkoutDTOs/EditWorkoutDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -20,34 +21,23 @@ export class WorkoutService {
     );
   }
 
-  addExerciseToWorkout(
-    createWorkoutDTO: CreateWorkoutDTO
-  ): Observable<WorkoutDTO> {
+  updateWorkout(editWorkoutDTO: EditWorkoutDTO): Observable<WorkoutDTO> {
     return this.http.patch<WorkoutDTO>(
-      environment.backendUrl + this.workoutURL + 'set/add',
-      createWorkoutDTO
-    );
-  }
-
-  removeExerciseFromWorkout(
-    removeExerciseSetDTO: RemoveExerciseSetDTO
-  ): Observable<WorkoutDTO> {
-    return this.http.patch<WorkoutDTO>(
-      environment.backendUrl + this.workoutURL + 'set/remove',
-      removeExerciseSetDTO
+      environment.backendUrl + this.workoutURL + '/edit',
+      editWorkoutDTO
     );
   }
 
   finishWorkout(workoutId: string): Observable<WorkoutDTO> {
     return this.http.patch<WorkoutDTO>(
-      environment.backendUrl + this.workoutURL + `finish/${workoutId}`,
+      environment.backendUrl + this.workoutURL + `/finish/${workoutId}`,
       null
     );
   }
 
   cancelFinishedWorkout(workoutId: string): Observable<WorkoutDTO> {
     return this.http.patch<WorkoutDTO>(
-      environment.backendUrl + this.workoutURL + `cancel/${workoutId}`,
+      environment.backendUrl + this.workoutURL + `/cancel/${workoutId}`,
       null
     );
   }
@@ -61,6 +51,12 @@ export class WorkoutService {
   getClientWorkouts(): Observable<WorkoutDTO[]> {
     return this.http.get<WorkoutDTO[]>(
       environment.backendUrl + this.workoutURL + '/client'
+    );
+  }
+
+  getWorkoutForClientCurrentMonth(): Observable<WorkoutDTO[]> {
+    return this.http.get<WorkoutDTO[]>(
+      environment.backendUrl + this.workoutURL + '/client/currentMonth'
     );
   }
 

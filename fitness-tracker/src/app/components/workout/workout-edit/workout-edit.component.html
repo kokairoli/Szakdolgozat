@@ -6,17 +6,96 @@
   (nzOnCancel)="handleCancel()"
 >
   <ng-template #modalTitle>{{ title }}</ng-template>
-
   <ng-template #modalContent>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
-    <p>Modal Content</p>
+    <form [formGroup]="workoutFormGroup">
+      <div class="basic-form-inputs">
+        <input nz-input placeholder="Name" type="text" formControlName="name" />
+        <textarea
+          placeholder="Comment"
+          rows="4"
+          nz-input
+          formControlName="comment"
+        ></textarea>
+        <div>
+          <nz-date-picker
+            nzShowTime
+            nzFormat="yyyy-MM-dd HH:mm"
+            formControlName="scheduled"
+            nzPlaceHolder="Select date and time"
+          ></nz-date-picker>
+        </div>
+      </div>
+      <div formArrayName="exerciseSet">
+        <h2>Exercises</h2>
+        <div
+          *ngFor="let workoutSet of exerciseSets.controls; let i = index"
+          [formGroupName]="i"
+          class="workout-set-container"
+        >
+          <div
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            {{ i + 1 }}.
+          </div>
+          <input
+            nz-input
+            placeholder="Reps"
+            type="number"
+            formControlName="numberOfReps"
+          />
+          <input
+            nz-input
+            placeholder="Sets"
+            type="number"
+            formControlName="numberOfSets"
+          />
+          <div style="display: flex; flex-direction: row">
+            <nz-select
+              formControlName="exerciseId"
+              [nzSize]="size"
+              style="width: 100%"
+              nzShowSearch
+            >
+              <nz-option
+                *ngFor="let option of exercises"
+                [nzLabel]="option.name"
+                [nzValue]="option.id"
+              ></nz-option>
+            </nz-select>
+            <button
+              style="margin-left: 0.6rem"
+              nz-button
+              nzType="primary"
+              nzShape="circle"
+              (click)="deleteExerciseSet(i)"
+            >
+              <span nz-icon nzType="delete" nzTheme="outline"></span>
+            </button>
+          </div>
+        </div>
+        <div class="add-button-container">
+          <button
+            nz-button
+            nzType="primary"
+            nzShape="circle"
+            (click)="addExerciseSet()"
+          >
+            <span nz-icon nzType="plus-circle" nzTheme="twotone"></span>
+          </button>
+        </div>
+      </div>
+    </form>
   </ng-template>
 
   <ng-template #modalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      [disabled]="!workoutFormGroup.valid || !exerciseSets.valid"
+      (click)="handleSave()"
+    >
+      Save
+    </button>
     <button (click)="handleCancel()" nz-button>Cancel</button>
-    <button nz-button nzType="primary" (click)="handleSave()">Save</button>
   </ng-template>
 </nz-modal>

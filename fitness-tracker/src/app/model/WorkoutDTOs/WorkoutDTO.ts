@@ -9,4 +9,5 @@ export interface WorkoutDTO {
   finished: boolean;
   sets: Array<ExerciseSetDTO>;
   coach: UserDTO;
+  scheduled: string;
 }
