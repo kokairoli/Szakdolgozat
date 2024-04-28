@@ -1,0 +1,37 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+  [nzStyle]="{ width: '30%' }"
+>
+  <ng-template #modalTitle>{{ title }}</ng-template>
+
+  <ng-template #modalContent>
+    <div class="coach-name">
+      <span>Coach name</span>
+      <span>{{ coach?.firstName + " " + coach?.lastName }}</span>
+    </div>
+    <div class="message-field">
+      <textarea
+        nz-input
+        [(ngModel)]="message"
+        placeholder="Send a message"
+        [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+      ></textarea>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="handleSave()"
+      [nzLoading]="isLoading"
+    >
+      Send
+    </button>
+    <button (click)="handleCancel()" nz-button>Cancel</button>
+  </ng-template>
+</nz-modal>

@@ -27,7 +27,7 @@ public class CoachingRequestController {
     }
 
     @PostMapping("/client")
-    public CoachingRequest createRequest(@RequestBody CreateCoachingRequestDTO createCoachingRequestDTO){
+    public CoachingRequestDTO createRequest(@RequestBody CreateCoachingRequestDTO createCoachingRequestDTO){
         return coachingRequestService.createCoachingRequest(createCoachingRequestDTO);
     }
 
@@ -41,9 +41,9 @@ public class CoachingRequestController {
         coachingRequestService.refuseCoachingRequest(coachingRequestId);
     }
 
-    @DeleteMapping("/client")
-    public void deleteCoachingRequest(@RequestBody Long coachingRequestId){
-        coachingRequestService.deleteCoachingRequest(coachingRequestId);
+    @DeleteMapping("/client/{coachRequestId}")
+    public void deleteCoachingRequest(@PathVariable Long coachRequestId){
+        coachingRequestService.deleteCoachingRequest(coachRequestId);
     }
 
 

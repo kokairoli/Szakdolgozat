@@ -7,6 +7,7 @@ import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientS
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachService;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,7 +35,7 @@ public class CoachingRequestService {
         return this.coachingRequestRepository.findAllByCoachId(coachService.getLoggedInUserId()).stream().map((this::translateToCoachingRequestDTOForCoach)).toList();
     }
 
-    public CoachingRequest createCoachingRequest(CreateCoachingRequestDTO createCoachingRequestDTO){
+    public CoachingRequestDTO createCoachingRequest(CreateCoachingRequestDTO createCoachingRequestDTO){
         CoachingRequest coachingRequest = new CoachingRequest();
         Client client = clientService.getLoggedInClient();
         Coach coach = coachService.getCoachById(createCoachingRequestDTO.getCoachId());
@@ -44,7 +45,8 @@ public class CoachingRequestService {
         coachingRequest.setCoach(coach);
         coachingRequest.setClient(client);
         coachingRequest.setActive(true);
-        return coachingRequestRepository.save(coachingRequest);
+        coachingRequest.setCreated_at(new Date());
+        return this.translateToCoachingRequestDTOForClient(coachingRequestRepository.save(coachingRequest));
 
     }
 

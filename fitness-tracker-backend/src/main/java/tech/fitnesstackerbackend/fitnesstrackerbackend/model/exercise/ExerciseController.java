@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -22,6 +23,11 @@ public class ExerciseController {
     @GetMapping
     public List<Exercise> getAllExercises(){
         return exerciseService.getAllExercise();
+    }
+
+    @GetMapping("/enums")
+    public ExerciseEnumsDTO getExerciseEnums(){
+        return new ExerciseEnumsDTO(Arrays.stream(Difficulty.values()).toList(), Arrays.stream(Mechanics.values()).toList(), Arrays.stream(MuscleGroup.values()).toList(),exerciseService.getEquipmentGroups());
     }
 
 }

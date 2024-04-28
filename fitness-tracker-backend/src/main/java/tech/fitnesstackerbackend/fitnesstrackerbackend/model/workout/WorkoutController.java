@@ -17,32 +17,28 @@ public class WorkoutController {
     }
 
     @PostMapping("/client")
-    public Workout createWorkout(@RequestBody CreateWorkoutDTO createWorkoutDTO){
+    public WorkoutDTO createWorkout(@RequestBody CreateWorkoutDTO createWorkoutDTO){
         return workoutService.createWorkout(createWorkoutDTO);
     }
 
     @PostMapping("/coach")
-    public Workout createWorkoutForUserFromCoach(@RequestBody CreateWorkoutCoachDTO createWorkoutCoachDTO){
+    public WorkoutDTO createWorkoutForUserFromCoach(@RequestBody CreateWorkoutCoachDTO createWorkoutCoachDTO){
         return workoutService.createWorkoutFromCoachToUser(createWorkoutCoachDTO);
     }
 
-    @PatchMapping("set/add")
-    public Workout addExerciseToWorkout(@RequestBody AddExerciseSetDTO addExerciseSetDTO){
-        return workoutService.addSetToWorkout(addExerciseSetDTO);
-    }
 
-    @PatchMapping("set/remove")
-    public Workout removeExerciseFromWorkout(@RequestBody RemoveExerciseSetDTO removeExerciseSetDTO){
-        return workoutService.removeSetFromWorkout(removeExerciseSetDTO.getWorkoutId(), removeExerciseSetDTO.getWorkoutSetId());
+    @PatchMapping("edit")
+    public WorkoutDTO updateWorkout(@RequestBody EditWorkoutDTO editWorkoutDTO){
+        return workoutService.updateWorkout(editWorkoutDTO);
     }
 
     @PatchMapping("finish/{workoutId}")
-    public Workout finishWorkout(@PathVariable String workoutId){
+    public WorkoutDTO finishWorkout(@PathVariable String workoutId){
         return workoutService.finishWorkout(Long.parseLong(workoutId));
     }
 
     @PatchMapping("cancel/{workoutId}")
-    public Workout cancelFinishedWorkout(@PathVariable String workoutId){
+    public WorkoutDTO cancelFinishedWorkout(@PathVariable String workoutId){
         return workoutService.cancelFinishedWorkout(Long.parseLong(workoutId));
     }
 
@@ -55,22 +51,27 @@ public class WorkoutController {
 
 
     @GetMapping("client")
-    public List<Workout> getWorkoutsForClient(){
+    public List<WorkoutDTO> getWorkoutsForClient(){
         return workoutService.getAllWorkoutForClient();
     }
 
     @GetMapping("client/{workoutId}")
-    public Workout getWorkoutForUser(@PathVariable String workoutId){
+    public WorkoutDTO getWorkoutForUser(@PathVariable String workoutId){
         return workoutService.getWorkoutForClient(Long.parseLong(workoutId));
     }
 
+    @GetMapping("client/currentMonth")
+    public List<WorkoutDTO> getWorkoutForClientCurrentMonth(){
+        return workoutService.getWorkoutForClientCurrentMonth();
+    }
+
     @GetMapping("coach/{clientId}")
-    public List<Workout> getWorkoutsForCoach(@PathVariable String clientId){
+    public List<WorkoutDTO> getWorkoutsForCoach(@PathVariable String clientId){
         return workoutService.getAllWorkoutFromCoachByClientId(Integer.parseInt(clientId));
     }
 
     @PatchMapping("comment")
-    public Workout addCommentToWorkout(@RequestBody AddCommentDTO addCommentDTO){
+    public WorkoutDTO addCommentToWorkout(@RequestBody AddCommentDTO addCommentDTO){
         return workoutService.addCommentToWorkout(addCommentDTO);
     }
 

@@ -1,5 +1,6 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach;
 
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,6 +9,8 @@ import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserDTO;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
+
+import java.util.List;
 
 
 @Service
@@ -52,6 +55,10 @@ public class CoachService extends UserService {
         coachRepository.save(coach);
     }
 
+    public List<CoachDTO> getAllCoach(){
+        return coachRepository.findAll().stream().map(this::translateCoachToCoachDTO).toList();
+    }
+
     public void removeClientFromClients(Client client){
         Coach coach = getLoggedInCoach();
         coach.removeClient(client);
@@ -63,8 +70,19 @@ public class CoachService extends UserService {
         coachRepository.save(coach);
     }
 
-    public UserDTO translateCoachToUserDTO(Coach coach){
-        return new UserDTO(coach.getFirstName(),coach.getLastName(),coach.getEmail());
+
+    public UserDTO translateCoachToUserDTO(@Nullable Coach coach){
+        if (coach == null){
+            return null;
+        }
+        return new UserDTO(coach.getId(),coach.getFirstName(),coach.getLastName(),coach.getEmail());
+    }
+
+    public CoachDTO translateCoachToCoachDTO(@Nullable Coach coach){
+        if (coach == null){
+            return null;
+        }
+        return new CoachDTO(coach.getId(),coach.getFirstName(),coach.getLastName(),coach.getEmail(),coach.getClientCount());
     }
 
 }

@@ -1,0 +1,44 @@
+.coach-container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--default-container-padding);
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.action-button-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  width: 100%;
+  button {
+    width: fit-content;
+  }
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  span {
+    font-size: 1rem;
+  }
+}
+
+.card-title {
+  text-align: center;
+}

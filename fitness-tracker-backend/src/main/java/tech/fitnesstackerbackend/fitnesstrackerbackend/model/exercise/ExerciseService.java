@@ -19,4 +19,8 @@ public class ExerciseService {
     public List<Exercise> getAllExercise(){
         return exerciseRepository.findAll();
     }
+
+    public List<String> getEquipmentGroups(){
+        return exerciseRepository.getEquipmentGroups();
+    }
 }

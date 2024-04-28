@@ -1,0 +1,22 @@
+.workout-set-container {
+  display: grid;
+  grid-template-columns: 1fr 4fr 4fr 7fr;
+  gap: 1rem;
+  padding-bottom: 0.7rem;
+}
+
+.add-button-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.basic-form-inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.basic-form-inputs > * {
+  margin-bottom: 0.7rem;
+}

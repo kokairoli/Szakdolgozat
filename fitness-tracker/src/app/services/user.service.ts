@@ -13,16 +13,32 @@ export class UserService {
   readonly authURL = '/auth';
   constructor(private http: HttpClient) {}
 
-  registerUser(registerUserDTO: RegisterUserDTO): Observable<AuthResponseDTO> {
+  registerClient(
+    registerUserDTO: RegisterUserDTO
+  ): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(
-      environment.backendUrl + this.authURL + '/register',
+      environment.backendUrl + this.authURL + '/client/register',
       registerUserDTO
     );
   }
 
-  loginUser(loginUserDTO: LoginUserDTO) {
+  registerCoach(registerUserDTO: RegisterUserDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(
-      environment.backendUrl + this.authURL + '/login',
+      environment.backendUrl + this.authURL + '/coach/register',
+      registerUserDTO
+    );
+  }
+
+  loginClient(loginUserDTO: LoginUserDTO) {
+    return this.http.post<AuthResponseDTO>(
+      environment.backendUrl + this.authURL + '/client/login',
+      loginUserDTO
+    );
+  }
+
+  loginCoach(loginUserDTO: LoginUserDTO) {
+    return this.http.post<AuthResponseDTO>(
+      environment.backendUrl + this.authURL + '/coach/login',
       loginUserDTO
     );
   }

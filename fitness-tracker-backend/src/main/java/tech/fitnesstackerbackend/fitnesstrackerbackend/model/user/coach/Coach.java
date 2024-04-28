@@ -1,7 +1,10 @@
 package tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -23,9 +26,12 @@ public class Coach extends User {
     private List<Client> clients = new ArrayList<>();
 
 
-
     public void addClient(Client client){
         clients.add(client);
+    }
+
+    public Integer getClientCount(){
+        return clients.size();
     }
 
     public void removeClient(Client client){

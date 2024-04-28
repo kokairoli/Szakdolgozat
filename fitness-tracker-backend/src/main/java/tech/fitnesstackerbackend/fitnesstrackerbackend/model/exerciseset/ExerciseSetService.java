@@ -36,11 +36,13 @@ public class ExerciseSetService {
         throw new IllegalArgumentException();
     }
 
-    public ExerciseSet updateExerciseOfSet(Long setId, Long exerciseId){
-        Optional<ExerciseSet> set = exerciseSetRepository.findById(setId);
-        Optional<Exercise> exercise = exerciseRepository.findById(exerciseId);
+    public ExerciseSet updateSet(EditExerciseSetDTO editExerciseSetDTO){
+        Optional<ExerciseSet> set = exerciseSetRepository.findById(editExerciseSetDTO.getId());
+        Optional<Exercise> exercise = exerciseRepository.findById(editExerciseSetDTO.getExerciseId());
 
         if (set.isPresent()&&exercise.isPresent()){
+            set.get().setNumberOfSets(editExerciseSetDTO.getNumberOfSets());
+            set.get().setNumberOfReps(editExerciseSetDTO.getNumberOfReps());
             set.get().setExercise(exercise.get());
             return exerciseSetRepository.save(set.get());
         }

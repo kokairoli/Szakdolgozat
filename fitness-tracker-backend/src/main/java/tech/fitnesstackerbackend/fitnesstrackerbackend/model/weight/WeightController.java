@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/weight")
@@ -25,8 +26,13 @@ public class WeightController {
 
     }
 
+    @GetMapping("/latest")
+    public Optional<WeightDTO> getClientLatestWeight(){
+        return weightService.getUserLatestWeight();
+    }
+
     @PostMapping
-    public WeightDTO addWeightToUser(@RequestBody WeightDTO weightDTO){
+    public WeightDTO addWeightToUser(@RequestBody AddWeightDTO weightDTO){
         return weightService.addWeightToClient(weightDTO);
     }
 }

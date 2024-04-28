@@ -1,0 +1,30 @@
+.progress-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 2fr;
+  padding: var(--default-container-padding);
+  gap: 1rem;
+}
+
+.weight-data-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.weight-data-container .block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid black;
+  border-radius: 3%;
+  padding: 1rem;
+}
+
+.weight-data-container .weight-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.workout-statistics-container {
+}

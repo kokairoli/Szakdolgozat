@@ -25,12 +25,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent {
-  loginFormGroup: FormGroup = new FormGroup({
+  clientLoginFormGroup: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
 
-  registerFormGroup: FormGroup = new FormGroup({
+  clientRegisterFormGroup: FormGroup = new FormGroup({
+    lastName: new FormControl('', [Validators.required]),
+    firstName: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+  });
+
+  coachLoginFormGroup: FormGroup = new FormGroup({
+    email: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+  });
+
+  coachRegisterFormGroup: FormGroup = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
     firstName: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
@@ -42,14 +54,14 @@ export class WelcomeComponent {
     private readonly router: Router
   ) {}
 
-  register() {
+  registerClient() {
     localStorage.removeItem('access_token');
     this.userService
-      .registerUser({
-        firstName: 'Roland',
-        lastName: 'Kókai',
-        email: 'asdasd@gmail.com',
-        password: '1234',
+      .registerClient({
+        firstName: this.clientRegisterFormGroup.get('firstName')?.value,
+        lastName: this.clientRegisterFormGroup.get('lastName')?.value,
+        email: this.clientRegisterFormGroup.get('email')?.value,
+        password: this.clientRegisterFormGroup.get('password')?.value,
       })
       .subscribe((response: AuthResponseDTO) => {
         localStorage.setItem('access_token', response.token);
@@ -57,13 +69,43 @@ export class WelcomeComponent {
       });
   }
 
-  login() {
+  loginClient() {
     localStorage.removeItem('access_token');
-    if (this.loginFormGroup.valid) {
+    if (this.clientLoginFormGroup.valid) {
       this.userService
-        .loginUser({
-          email: this.loginFormGroup.get('email')?.value,
-          password: this.loginFormGroup.get('password')?.value,
+        .loginClient({
+          email: this.clientLoginFormGroup.get('email')?.value,
+          password: this.clientLoginFormGroup.get('password')?.value,
+        })
+        .subscribe((response: AuthResponseDTO) => {
+          localStorage.setItem('access_token', response.token);
+          this.router.navigate(['/home']);
+        });
+    }
+  }
+
+  registerCoach() {
+    localStorage.removeItem('access_token');
+    this.userService
+      .registerCoach({
+        firstName: this.coachRegisterFormGroup.get('firstName')?.value,
+        lastName: this.coachRegisterFormGroup.get('lastName')?.value,
+        email: this.coachRegisterFormGroup.get('email')?.value,
+        password: this.coachRegisterFormGroup.get('password')?.value,
+      })
+      .subscribe((response: AuthResponseDTO) => {
+        localStorage.setItem('access_token', response.token);
+        this.router.navigate(['/home']);
+      });
+  }
+
+  loginCoach() {
+    localStorage.removeItem('access_token');
+    if (this.coachLoginFormGroup.valid) {
+      this.userService
+        .loginCoach({
+          email: this.coachLoginFormGroup.get('email')?.value,
+          password: this.coachLoginFormGroup.get('password')?.value,
         })
         .subscribe((response: AuthResponseDTO) => {
           localStorage.setItem('access_token', response.token);
