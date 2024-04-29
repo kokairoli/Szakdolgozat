@@ -25,8 +25,8 @@ import { forkJoin } from 'rxjs';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { EditWorkoutDTO } from 'src/app/model/WorkoutDTOs/EditWorkoutDTO';
 import { EditGoalDTO } from 'src/app/model/GoalDTOs/EditGoalDTO';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -37,6 +37,7 @@ export type ChartOptions = {
   stroke: ApexStroke;
   title: ApexTitleSubtitle;
 };
+
 @Component({
   selector: 'app-progress',
   standalone: true,
@@ -50,6 +51,7 @@ export type ChartOptions = {
     NzProgressModule,
     NzIconModule,
     NzInputNumberModule,
+    NzCalendarModule,
   ],
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss'],
@@ -96,6 +98,12 @@ export class ProgressComponent implements OnInit {
   ]);
 
   chartOptions: ChartOptions;
+
+  today = {
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+    day: new Date().getDate(),
+  };
 
   constructor() {
     this.chartOptions = {
@@ -295,5 +303,39 @@ export class ProgressComponent implements OnInit {
         break;
       }
     }
+  }
+
+  areAllWorkoutFinishedInADay(
+    date: Date
+  ): 'finished' | 'unfinished' | 'none' | 'planned' {
+    const sameDayWorkout = this.allWorkouts.filter((workout) => {
+      const workoutDate = new Date(workout.scheduled);
+      return (
+        workoutDate.getFullYear() === date.getFullYear() &&
+        workoutDate.getMonth() === date.getMonth() &&
+        workoutDate.getDate() === date.getDate()
+      );
+    });
+    if (sameDayWorkout.length > 0) {
+      if (
+        this.today.year < date.getFullYear() ||
+        (this.today.year === date.getFullYear() &&
+          this.today.month < date.getMonth()) ||
+        (this.today.year === date.getFullYear() &&
+          this.today.month === date.getMonth() &&
+          this.today.day < date.getDate())
+      ) {
+        return 'planned';
+      }
+    } else {
+      return 'none';
+    }
+    for (let i = 0; i < sameDayWorkout.length; i++) {
+      if (sameDayWorkout[i].finished === false) {
+        return 'unfinished';
+      }
+    }
+
+    return 'finished';
   }
 }

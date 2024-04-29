@@ -97,7 +97,54 @@
       <div>{{ startWeigth }}</div>
     </div>
   </div>
-  <div class="calendar-container"></div>
+  <div class="calendar-container">
+    <nz-calendar
+      [nzFullscreen]="false"
+      [nzCustomHeader]="customHeader"
+      [nzDateCell]="dateCellTpl"
+    >
+      <!-- <div *nzDateCell>
+        <span
+          nz-icon
+          [nzType]="'check-circle'"
+          [nzTheme]="'twotone'"
+          [nzTwotoneColor]="'#52c41a'"
+        ></span>
+      </div> -->
+    </nz-calendar>
+    <ng-template #dateCellTpl let-date>
+      @switch (areAllWorkoutFinishedInADay(date)) { @case ('finished'){
+      <span
+        nz-icon
+        nzType="check-circle"
+        nzTheme="twotone"
+        nzTwotoneColor="#52c41a"
+      ></span>
+      } @case ('unfinished') {
+      <span
+        nz-icon
+        nzType="close-circle"
+        nzTheme="twotone"
+        nzTwotoneColor="#bd6262"
+      ></span>
+      } @case('planned'){
+      <span
+        nz-icon
+        nzType="question-circle"
+        nzTheme="outline"
+        nzTheme="twotone"
+        nzTwotoneColor="#bdbdbd"
+      ></span>
+      }@case ('none') {
+      <span>&nbsp;</span>
+      } }
+    </ng-template>
+    <ng-template #customHeader>
+      <div style="padding: 8px">
+        <h2>Workout history</h2>
+      </div>
+    </ng-template>
+  </div>
   <div class="workout-statistics-container">
     <div class="block">
       <h2>This month</h2>
