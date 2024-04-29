@@ -30,7 +30,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule, NzSelectSizeType } from 'ng-zorro-antd/select';
 import { ExerciseDTO } from 'src/app/model/ExerciseDTOs/ExerciseDTO';
 import { CreateWorkoutDTO } from 'src/app/model/WorkoutDTOs/CreateWorkoutDTO';
-import { CreateExerciseSetDTO } from 'src/app/model/ExerciseSetDTOs/CreateExerciseSetDTO';
 import { EditWorkoutDTO } from 'src/app/model/WorkoutDTOs/EditWorkoutDTO';
 
 interface EditCreateExerciseSet {

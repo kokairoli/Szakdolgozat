@@ -51,43 +51,119 @@
     </div>
     <div class="block">
       <h3>Target weight</h3>
-      <div></div>
+      <div class="goal-div">
+        @if(!editWeightGoal){ @if (clientGoal?.targetWeight) {
+        {{ clientGoal?.targetWeight }}
+        <button
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          (click)="editWeightGoal = true"
+        >
+          <span nz-icon nzType="edit"></span>
+        </button>
+        }@else {
+        <button nz-button nzType="default" (click)="editWeightGoal = true">
+          Set goal
+        </button>
+        } }@else{
+        <input nz-input type="number" [formControl]="weightGoalFormControl" />
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="circle"
+          [disabled]="!weightGoalFormControl.valid"
+          (click)="saveGoalWeight()"
+        >
+          <span nz-icon nzType="check" nzTheme="outline"></span>
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="circle"
+          (click)="editWeightGoal = false"
+        >
+          <span nz-icon nzType="close" nzTheme="outline"></span>
+        </button>
+        }
+      </div>
       <h3>Current weight</h3>
       <div>{{ currentWeight?.weight }}</div>
       <h3>Smallest weight</h3>
-      <div></div>
+      <div>{{ smallestWeight }}</div>
       <h3>Biggest weight</h3>
-      <div></div>
+      <div>{{ biggestWeight }}</div>
       <h3>Start weight</h3>
-      <div></div>
+      <div>{{ startWeigth }}</div>
     </div>
   </div>
   <div class="calendar-container"></div>
   <div class="workout-statistics-container">
-    <div class="current-month">
+    <div class="block">
       <h2>This month</h2>
-      <div class="row">
-        <h3>Target exercise count</h3>
-        <div>{{ clientGoal?.targetWorkoutCount }}</div>
+      <h3>Target exercise count</h3>
+      <div class="goal-div">
+        @if(!editWorkoutGoal){ @if (clientGoal?.targetWorkoutCount) {
+        {{ clientGoal?.targetWorkoutCount }}
+        <button
+          nz-button
+          nzType="default"
+          nzShape="circle"
+          (click)="editWorkoutGoal = true"
+        >
+          <span nz-icon nzType="edit"></span>
+        </button>
+        }@else {
+        <button nz-button nzType="default" (click)="editWorkoutGoal = true">
+          Set goal
+        </button>
+        } }@else{
+        <input nz-input type="number" [formControl]="workoutGoalFormControl" />
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="circle"
+          [disabled]="!weightGoalFormControl.valid"
+          (click)="saveWorkoutGoal()"
+        >
+          <span nz-icon nzType="check" nzTheme="outline"></span>
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          nzShape="circle"
+          (click)="editWorkoutGoal = false"
+        >
+          <span nz-icon nzType="close" nzTheme="outline"></span>
+        </button>
+        }
       </div>
-      <div class="row">
-        <h3>Planned workouts</h3>
-        <div>{{ currentMonthWorkouts.length }}</div>
-      </div>
-      <div class="row">
-        <h3>Finished workouts</h3>
-        <div>{{ currentMonthWorkouts.length }}</div>
+      <h3>Planned workouts</h3>
+      <div>{{ currentMonthWorkouts.length }}</div>
+
+      <h3>Finished workouts</h3>
+      <div>{{ currentMonthFinishedWorkouts }}</div>
+
+      <div class="progress-chart" style="justify-self: center">
+        <nz-progress
+          nzType="dashboard"
+          [nzPercent]="monthPercentage"
+          [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"
+        ></nz-progress>
       </div>
     </div>
-    <div class="all-time">
+
+    <div class="block">
       <h2>All time</h2>
-      <div class="row">
-        <h3>Finished workouts</h3>
-        <div>{{ finishedWorkouts }}</div>
-      </div>
-      <div class="row">
-        <h3>Planned workouts</h3>
-        <div>{{ allWorkouts.length }}</div>
+      <h3>Planned workouts</h3>
+      <div>{{ allWorkouts.length }}</div>
+      <h3>Finished workouts</h3>
+      <div>{{ finishedWorkouts }}</div>
+      <div class="progress-chart">
+        <nz-progress
+          nzStrokeLinecap="round"
+          [nzPercent]="allPercentage"
+        ></nz-progress>
       </div>
     </div>
   </div>

@@ -34,6 +34,7 @@ import {
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import { CustomCalendarDateService } from 'src/app/services/CustomDateCalendar/custom-calendar-date.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -77,6 +78,7 @@ const colors: Record<string, EventColor> = {
 })
 export class WorkoutComponent implements OnInit {
   private readonly workoutService = inject(WorkoutService);
+  private readonly modalService = inject(NzModalService);
 
   createNewWorkoutVisible = false;
   editExerciseVisible = false;
@@ -93,18 +95,18 @@ export class WorkoutComponent implements OnInit {
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+      label: '<span>Edit </span>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
       },
     },
     {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
+      label: '<span>Delete</span><br/>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.deleteWorkout(event.meta.id);
       },
     },
   ];
@@ -198,8 +200,20 @@ export class WorkoutComponent implements OnInit {
   }
 
   deleteWorkout(workoutId: number) {
-    this.workoutService.deleteWorkout(workoutId.toString()).subscribe(() => {
-      this.getWorkouts();
+    this.modalService.confirm({
+      nzTitle: 'Are you sure?',
+      nzContent:
+        '<b style="color: red;">This action will delete this workout</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.workoutService
+          .deleteWorkout(workoutId.toString())
+          .subscribe(() => {
+            this.getWorkouts();
+          }),
+      nzCancelText: 'No',
     });
   }
 
@@ -261,7 +275,6 @@ export class WorkoutComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    console.log(event);
     this.editWorkout(event.meta as WorkoutDTO);
   }
 

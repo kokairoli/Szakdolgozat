@@ -22,6 +22,11 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WorkoutService } from 'src/app/services/WorkoutService/workout.service';
 import { WorkoutDTO } from 'src/app/model/WorkoutDTOs/WorkoutDTO';
 import { forkJoin } from 'rxjs';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { EditWorkoutDTO } from 'src/app/model/WorkoutDTOs/EditWorkoutDTO';
+import { EditGoalDTO } from 'src/app/model/GoalDTOs/EditGoalDTO';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -42,6 +47,9 @@ export type ChartOptions = {
     NzModalModule,
     NzInputModule,
     ReactiveFormsModule,
+    NzProgressModule,
+    NzIconModule,
+    NzInputNumberModule,
   ],
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss'],
@@ -58,16 +66,33 @@ export class ProgressComponent implements OnInit {
   clientGoal?: GoalDTO | null;
 
   currentMonthWorkouts: WorkoutDTO[] = [];
+  currentMonthFinishedWorkouts: number = 0;
+  monthPercentage: number = 0;
   allWorkouts: WorkoutDTO[] = [];
   finishedWorkouts: number = 0;
   plannedWorokuts: number = 0;
+  allPercentage: number = 0;
+  biggestWeight: number = 0;
+  startWeigth: number = 0;
+  smallestWeight: number = 0;
 
+  editWeightGoal = false;
+  editWorkoutGoal = false;
   addWeightVisible = false;
   isLoading = false;
   addWeightFormControl = new FormControl<number | undefined>(undefined, [
     Validators.required,
     Validators.min(30),
     Validators.max(635),
+  ]);
+
+  weightGoalFormControl = new FormControl<number | undefined>(undefined, [
+    Validators.min(30),
+    Validators.max(635),
+  ]);
+
+  workoutGoalFormControl = new FormControl<number | undefined>(undefined, [
+    Validators.min(1),
   ]);
 
   chartOptions: ChartOptions;
@@ -110,13 +135,17 @@ export class ProgressComponent implements OnInit {
     });
     this.goalService.getGoal().subscribe((goal) => {
       this.clientGoal = goal;
+      this.workoutGoalFormControl.setValue(goal?.targetWorkoutCount);
+      this.weightGoalFormControl.setValue(goal?.targetWeight);
     });
   }
 
   getAllWeightForUser() {
     this.weightService.getWeightsForUser().subscribe((weights) => {
       this.weights = weights;
-      console.log(weights);
+      this.startWeigth = weights[0].weight;
+      this.biggestWeight = Math.max(...weights.map((weight) => weight.weight));
+      this.smallestWeight = Math.min(...weights.map((weight) => weight.weight));
 
       this.chartOptions.series = [
         { name: 'Weight', data: weights.map((weight) => weight.weight) },
@@ -146,7 +175,18 @@ export class ProgressComponent implements OnInit {
       this.finishedWorkouts = workouts.filter(
         (workout) => workout.finished
       ).length;
+      this.allPercentage = +(
+        (this.finishedWorkouts / workouts.length) *
+        100
+      ).toFixed(0);
       this.currentMonthWorkouts = currentMonthWorkouts;
+      this.currentMonthFinishedWorkouts = currentMonthWorkouts.filter(
+        (workout) => workout.finished
+      ).length;
+      this.monthPercentage = +(
+        (this.currentMonthFinishedWorkouts / currentMonthWorkouts.length) *
+        100
+      ).toFixed(0);
     });
   }
 
@@ -174,6 +214,86 @@ export class ProgressComponent implements OnInit {
             this.isLoading = false;
           },
         });
+    }
+  }
+
+  translateEditWorkoutDTO(): EditGoalDTO {
+    return {
+      targetWeight:
+        this.weightGoalFormControl.value === null
+          ? undefined
+          : this.weightGoalFormControl.value,
+      targetWorkoutCount:
+        this.workoutGoalFormControl.value === null
+          ? undefined
+          : this.workoutGoalFormControl.value,
+    };
+  }
+
+  saveGoalWeight() {
+    if (this.weightGoalFormControl.valid) {
+      this.saveGoal(
+        this.clientGoal?.targetWeight !== undefined ||
+          this.clientGoal?.targetWorkoutCount !== undefined,
+        {
+          targetWeight:
+            this.weightGoalFormControl.value === null
+              ? undefined
+              : this.weightGoalFormControl.value,
+        },
+        'weight'
+      );
+    }
+  }
+
+  saveWorkoutGoal() {
+    if (this.workoutGoalFormControl.valid) {
+      this.saveGoal(
+        this.clientGoal?.targetWeight !== undefined ||
+          this.clientGoal?.targetWorkoutCount !== undefined,
+        {
+          targetWorkoutCount:
+            this.workoutGoalFormControl.value === null
+              ? undefined
+              : this.workoutGoalFormControl.value,
+        },
+        'workout'
+      );
+    }
+  }
+
+  private saveGoal(
+    exist: boolean,
+    editGoalDTO: EditGoalDTO,
+    type: 'weight' | 'workout'
+  ) {
+    if (exist) {
+      this.goalService
+        .editGoalForClient(editGoalDTO)
+        .subscribe((goal: GoalDTO) => {
+          this.clientGoal = goal;
+          this.setEditModeToFalse(type);
+        });
+    } else {
+      this.goalService
+        .createGoalForClient(editGoalDTO)
+        .subscribe((goal: GoalDTO) => {
+          this.clientGoal = goal;
+          this.setEditModeToFalse(type);
+        });
+    }
+  }
+
+  setEditModeToFalse(type: 'weight' | 'workout') {
+    switch (type) {
+      case 'weight': {
+        this.editWeightGoal = false;
+        break;
+      }
+      case 'workout': {
+        this.editWorkoutGoal = false;
+        break;
+      }
     }
   }
 }
