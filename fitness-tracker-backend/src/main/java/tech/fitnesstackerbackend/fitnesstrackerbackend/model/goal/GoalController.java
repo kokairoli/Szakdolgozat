@@ -2,9 +2,7 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.goal;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -23,4 +21,10 @@ public class GoalController {
     public Optional<Goal> getGoalOfClient(){
         return goalService.getGoalForClient();
     }
+
+    @PostMapping
+    public Goal createGoalForClient(@RequestBody EditGoalDTO editGoalDTO){return goalService.createGoalForClient(editGoalDTO);}
+
+    @PatchMapping
+    public Goal editGoalForClient(@RequestBody EditGoalDTO editGoalDTO){return goalService.editGoalForClient(editGoalDTO);}
 }

@@ -12,11 +12,55 @@
 }
 
 .weight-data-container .block {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   border: 2px solid black;
   border-radius: 3%;
+}
+
+.workout-statistics-container .block,
+.weight-data-container .block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   padding: 1rem;
+  align-items: center;
+}
+
+.workout-statistics-container .block:first-child {
+  border-bottom: 2px solid black;
+}
+
+.workout-statistics-container .block h2,
+.workout-statistics-container .block .progress-chart {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.workout-statistics-container {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+  border-radius: 3%;
+  height: fit-content;
+}
+.workout-statistics-container .current-month {
+  border-bottom: 2px solid black;
+}
+.workout-statistics-container .all-time,
+.workout-statistics-container .current-month {
+  padding: 1rem;
+}
+
+.workout-statistics-container h2 {
+  text-align: center;
+}
+
+.weight-data-container .block div,
+.workout-statistics-container .block div {
+  font-size: 1.2rem;
+}
+
+.block h3 {
+  margin: 0;
 }
 
 .weight-data-container .weight-button-container {
@@ -24,6 +68,12 @@
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.goal-div {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
 }
 
 .workout-statistics-container {

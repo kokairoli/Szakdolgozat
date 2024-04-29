@@ -2,18 +2,18 @@
   <div class="button-container">
     <div>
       <button
-        (click)="tableView = true"
-        nz-button
-        [nzType]="tableView ? 'primary' : 'default'"
-      >
-        Table View
-      </button>
-      <button
         (click)="tableView = false"
         nz-button
         [nzType]="tableView ? 'default' : 'primary'"
       >
         Calendar View
+      </button>
+      <button
+        (click)="tableView = true"
+        nz-button
+        [nzType]="tableView ? 'primary' : 'default'"
+      >
+        Table View
       </button>
     </div>
 
@@ -31,7 +31,7 @@
   ></app-workout-edit>
   @if (tableView) {
   <div class="table-view">
-    <h2>My own workouts</h2>
+    <h2>Workouts</h2>
     <nz-table #ownWorkoutsTable [nzData]="workoutsData">
       <thead>
         <tr>
