@@ -1,0 +1,56 @@
+<div class="client-container">
+  <h1>My clients</h1>
+  <div class="cards-container">
+    @for (client of clients; track $index) {
+    <nz-card class="card" [nzBordered]="true">
+      <div class="card-content">
+        <div class="card-title">
+          <h2>
+            {{ client.firstName + " " + client.lastName }}
+          </h2>
+        </div>
+        <div class="card-details">
+          <span>Email:</span>
+          <span>{{ client.email }}</span>
+        </div>
+        <div class="button-container">
+          <button (click)="deleteClient(client)" nz-button nzType="primary">
+            Delete client
+          </button>
+        </div>
+      </div>
+    </nz-card>
+    }
+  </div>
+  <h1>Requests</h1>
+  <div class="cards-container">
+    @for (request of coachingRequests; track $index) {
+    <nz-card class="card" [nzBordered]="true">
+      <div class="card-content">
+        <div class="card-title">
+          <h2>
+            {{ request.userDTO.firstName + " " + request.userDTO.lastName }}
+          </h2>
+        </div>
+        <div class="card-details">
+          <span>Message:</span>
+          <span>{{ request.message }}</span>
+        </div>
+        <div class="card-details">
+          <span>Email:</span>
+          <span>{{ request.userDTO.email }}</span>
+        </div>
+
+        <div class="button-container">
+          <button (click)="acceptRequest(request)" nz-button nzType="primary">
+            Accept request
+          </button>
+          <button (click)="refuseRequest(request)" nz-button nzType="primary">
+            Refuse request
+          </button>
+        </div>
+      </div>
+    </nz-card>
+    }
+  </div>
+</div>

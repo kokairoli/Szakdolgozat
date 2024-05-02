@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ActivatedRoute,
@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import { NavigationComponent } from '../navigation/navigation.component';
 import { filter, map } from 'rxjs';
+import { UserStorageService } from 'src/app/services/UserStorage/user-storage.service';
 
 @Component({
   selector: 'app-container',
@@ -18,6 +19,7 @@ import { filter, map } from 'rxjs';
 })
 export class ContainerComponent {
   urlSegments: string[] = [];
+  private readonly userStorageService = inject(UserStorageService);
 
   constructor(
     private readonly activatedRoute: ActivatedRoute,

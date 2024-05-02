@@ -1,6 +1,10 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
+import {
+  ApexAnnotations,
+  ChartComponent,
+  NgApexchartsModule,
+} from 'ng-apexcharts';
 
 import {
   ApexAxisChartSeries,
@@ -74,9 +78,9 @@ export class ProgressComponent implements OnInit {
   finishedWorkouts: number = 0;
   plannedWorokuts: number = 0;
   allPercentage: number = 0;
-  biggestWeight: number = 0;
-  startWeigth: number = 0;
-  smallestWeight: number = 0;
+  biggestWeight?: number;
+  startWeigth?: number;
+  smallestWeight?: number;
 
   editWeightGoal = false;
   editWorkoutGoal = false;
@@ -151,9 +155,15 @@ export class ProgressComponent implements OnInit {
   getAllWeightForUser() {
     this.weightService.getWeightsForUser().subscribe((weights) => {
       this.weights = weights;
-      this.startWeigth = weights[0].weight;
-      this.biggestWeight = Math.max(...weights.map((weight) => weight.weight));
-      this.smallestWeight = Math.min(...weights.map((weight) => weight.weight));
+      if (weights.length > 0) {
+        this.startWeigth = weights[0].weight;
+        this.biggestWeight = Math.max(
+          ...weights.map((weight) => weight.weight)
+        );
+        this.smallestWeight = Math.min(
+          ...weights.map((weight) => weight.weight)
+        );
+      }
 
       this.chartOptions.series = [
         { name: 'Weight', data: weights.map((weight) => weight.weight) },
@@ -167,6 +177,7 @@ export class ProgressComponent implements OnInit {
           })
         ),
       };
+
       this.chart?.updateOptions({
         series: this.chartOptions.series,
         xaxis: this.chartOptions.xaxis,

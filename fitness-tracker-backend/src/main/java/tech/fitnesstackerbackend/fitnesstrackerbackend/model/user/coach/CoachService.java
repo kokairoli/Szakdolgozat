@@ -9,20 +9,23 @@ import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserDTO;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientService;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class CoachService extends UserService {
 
     private final CoachRepository coachRepository;
+    private final ClientService clientService;
 
     @Autowired
-    public CoachService(CoachRepository coachRepository) {
+    public CoachService(CoachRepository coachRepository, ClientService clientService) {
         this.coachRepository = coachRepository;
+        this.clientService = clientService;
     }
-
 
     public boolean userExists(String email){
         return coachRepository.findByEmail(email).isPresent();
@@ -59,16 +62,35 @@ public class CoachService extends UserService {
         return coachRepository.findAll().stream().map(this::translateCoachToCoachDTO).toList();
     }
 
-    public void removeClientFromClients(Client client){
-        Coach coach = getLoggedInCoach();
-        coach.removeClient(client);
-        coachRepository.save(coach);
+    public UserDTO getCoachOfClient(){
+        return  translateCoachToUserDTO(clientService.getLoggedInClient().getCoach());
     }
 
-    public void removedClient(Client client, Coach coach){
-        coach.removeClient(client);
-        coachRepository.save(coach);
+    public List<UserDTO> getClientsOfCoach(){
+        return clientService.getClientsOfCoach(getLoggedInUserId());
     }
+
+    public void removeClient(Integer clientId){
+        Coach coach = getLoggedInCoach();
+        Client client = clientService.getClientById(clientId);
+        coach.removeClient(client);
+        client.removeCoach();
+        clientService.saveClient(client);
+        coachRepository.save(coach);
+
+    }
+
+    public void removeCoach(Integer coachId){
+        Client client = clientService.getLoggedInClient();
+        Optional<Coach> coach = coachRepository.findById(coachId);
+        if (coach.isPresent()){
+            coach.get().removeClient(client);
+            client.removeCoach();
+            clientService.saveClient(client);
+            coachRepository.save(coach.get());
+        }
+    }
+
 
 
     public UserDTO translateCoachToUserDTO(@Nullable Coach coach){

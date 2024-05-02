@@ -28,6 +28,7 @@
     [workout]="selectedWorkout"
     (dataChanged)="dataChanged($event)"
     (closeModal)="closeWorkoutEdit()"
+    [isCoach]="true"
   ></app-workout-edit>
   <app-view-workout
     [isVisible]="showWorkoutVisible"
@@ -37,7 +38,12 @@
   @if (tableView) {
   <div class="table-view">
     <h2>Workouts</h2>
-    <nz-table #ownWorkoutsTable [nzData]="workoutsData">
+    @for (workoutGroup of workoutsData; track $index) {
+    <h3>
+      Client:
+      {{ workoutGroup.client.firstName + " " + workoutGroup.client.lastName }}
+    </h3>
+    <nz-table #ownWorkoutsTable [nzData]="workoutGroup.workouts">
       <thead>
         <tr>
           <th>Finished</th>
@@ -45,18 +51,18 @@
           <th>Comment</th>
           <th>Number of exercises</th>
           <th>Scheduled</th>
-          <th>Coach</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let data of ownWorkoutsTable.data">
-          <td (click)="setFinished(data)">
-            <nz-checkbox-wrapper
-              style="width: 100%"
-              (nzOnChange)="setFinished(data)"
-            >
-              <label nz-checkbox [nzChecked]="data.finished"></label>
+          <td>
+            <nz-checkbox-wrapper style="width: 100%">
+              <label
+                nz-checkbox
+                [nzDisabled]="true"
+                [nzChecked]="data.finished"
+              ></label>
             </nz-checkbox-wrapper>
           </td>
           <td>
@@ -66,15 +72,8 @@
           <td>{{ data.sets.length }}</td>
           <td>{{ data.scheduled }}</td>
           <td>
-            @if (data.coach) {
-            {{
-              data.coach ? data.coach.firstName + " " + data.coach.lastName : ""
-            }}
-            }
-          </td>
-          <td>
             <div class="action-column">
-              @if (!data.coach) {
+              @if (!data.finished) {
               <button
                 nz-button
                 nzType="primary"
@@ -83,8 +82,6 @@
               >
                 <span nz-icon nzType="delete" nzTheme="outline"></span>
               </button>
-
-              } @if(!data.finished && !data.coach){
               <button
                 nz-button
                 nzType="primary"
@@ -99,6 +96,7 @@
         </tr>
       </tbody>
     </nz-table>
+    }
   </div>
   }@else{
   <div class="calendar-view">
@@ -177,7 +175,6 @@
         [activeDayIsOpen]="activeDayIsOpen"
         (dayClicked)="dayClicked($event.day)"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
       >
       </mwl-calendar-month-view>
       <mwl-calendar-week-view
@@ -186,7 +183,6 @@
         [events]="events"
         [refresh]="refresh"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
       >
       </mwl-calendar-week-view>
       <mwl-calendar-day-view
@@ -195,7 +191,6 @@
         [events]="events"
         [refresh]="refresh"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
       >
       </mwl-calendar-day-view>
     </div>

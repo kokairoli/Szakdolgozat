@@ -4,7 +4,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { WorkoutDTO } from 'src/app/model/WorkoutDTOs/WorkoutDTO';
 import { WorkoutService } from 'src/app/services/WorkoutService/workout.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { WorkoutEditComponent } from './workout-edit/workout-edit.component';
+import { WorkoutEditComponent } from '../workout-edit/workout-edit.component';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import {
@@ -29,6 +29,7 @@ import {
 import { Subject } from 'rxjs';
 import { CustomCalendarDateService } from 'src/app/services/CustomDateCalendar/custom-calendar-date.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { ViewWorkoutComponent } from '../view-workout/view-workout.component';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -60,6 +61,7 @@ const colors: Record<string, EventColor> = {
     NzIconModule,
     NzCheckboxModule,
     CalendarModule,
+    ViewWorkoutComponent,
   ],
   providers: [
     {
@@ -76,6 +78,7 @@ export class WorkoutComponent implements OnInit {
 
   createNewWorkoutVisible = false;
   editExerciseVisible = false;
+  showWorkoutVisible = false;
 
   workoutsData: WorkoutDTO[] = [];
   selectedWorkout: WorkoutDTO | undefined = undefined;
@@ -87,66 +90,9 @@ export class WorkoutComponent implements OnInit {
 
   viewDate: Date = new Date();
 
-  actions: CalendarEventAction[] = [
-    {
-      label: '<span>Edit </span>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<span>Delete</span><br/>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.deleteWorkout(event.meta.id);
-      },
-    },
-  ];
-
   refresh = new Subject<void>();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: { ...colors['red'] },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: { ...colors['yellow'] },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: { ...colors['blue'] },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: { ...colors['yellow'] },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  events: CalendarEvent[] = [];
 
   activeDayIsOpen: boolean = true;
 
@@ -176,7 +122,59 @@ export class WorkoutComponent implements OnInit {
         end: addHours(new Date(workout.scheduled), 2),
         title: workout.name,
         color: workout.finished ? { ...colors['green'] } : { ...colors['red'] },
-        actions: this.actions,
+        actions: !workout.coach
+          ? [
+              {
+                label: workout.finished
+                  ? '<span>Cancel finished workout </span><br>'
+                  : '<span>Finish </span><br>',
+                a11yLabel: 'Finish',
+                onClick: ({
+                  event,
+                }: {
+                  event: CalendarEvent<WorkoutDTO>;
+                }): void => {
+                  const workout = event.meta as WorkoutDTO;
+                  this.setFinished(workout);
+                },
+              },
+              {
+                label: !workout.finished ? '<span>Edit </span>' : '',
+                a11yLabel: 'Edit',
+                onClick: ({
+                  event,
+                }: {
+                  event: CalendarEvent<WorkoutDTO>;
+                }): void => {
+                  if (event.meta && !event.meta.finished) {
+                    this.editWorkout(event.meta);
+                  }
+                },
+              },
+              {
+                label: '<span>Delete</span><br/>',
+                a11yLabel: 'Delete',
+                onClick: ({ event }: { event: CalendarEvent }): void => {
+                  this.deleteWorkout(event.meta.id);
+                },
+              },
+            ]
+          : [
+              {
+                label: workout.finished
+                  ? '<span>Cancel finished workout </span><br>'
+                  : '<span>Finish </span><br>',
+                a11yLabel: 'Finish',
+                onClick: ({
+                  event,
+                }: {
+                  event: CalendarEvent<WorkoutDTO>;
+                }): void => {
+                  const workout = event.meta as WorkoutDTO;
+                  this.setFinished(workout);
+                },
+              },
+            ],
         draggable: false,
         meta: workout,
       };
@@ -191,6 +189,16 @@ export class WorkoutComponent implements OnInit {
   closeWorkoutEdit() {
     this.createNewWorkoutVisible = false;
     this.selectedWorkout = undefined;
+  }
+
+  showWorkout(workout: WorkoutDTO) {
+    this.selectedWorkout = workout;
+    this.showWorkoutVisible = true;
+  }
+
+  hideWorkout() {
+    this.selectedWorkout = undefined;
+    this.showWorkoutVisible = false;
   }
 
   deleteWorkout(workoutId: number) {
@@ -269,7 +277,7 @@ export class WorkoutComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.editWorkout(event.meta as WorkoutDTO);
+    this.showWorkout(event.meta as WorkoutDTO);
   }
 
   addEvent(): void {

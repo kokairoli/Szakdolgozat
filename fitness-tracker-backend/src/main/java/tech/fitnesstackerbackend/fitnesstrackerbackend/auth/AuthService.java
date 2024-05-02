@@ -7,12 +7,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.config.JwtService;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.Role;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientRepository;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientService;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachRepository;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachService;
+
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class AuthService {
         coach.setPassword(passwordEncoder.encode(request.getPassword()));
         coach.setRole(Role.COACH);
         coachRepository.save(coach);
-        String token = jwtService.generateToken(coach);
+        String token = jwtService.generateToken(this.createExtraClaims(coach),coach);
         return AuthResponse.builder().token(token).build();
     }
 
@@ -58,7 +61,7 @@ public class AuthService {
         client.setPassword(passwordEncoder.encode(request.getPassword()));
         client.setRole(Role.CLIENT);
         clientRepository.save(client);
-        String token = jwtService.generateToken(client);
+        String token = jwtService.generateToken(this.createExtraClaims(client),client);
         return AuthResponse.builder().token(token).build();
     }
 
@@ -70,7 +73,7 @@ public class AuthService {
                 )
         );
         Client client = clientRepository.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtService.generateToken(client);
+        String token = jwtService.generateToken(this.createExtraClaims(client),client);
         return AuthResponse.builder().token(token).build();
     }
 
@@ -82,8 +85,17 @@ public class AuthService {
                 )
         );
         Coach coach = coachRepository.findByEmail(request.getEmail()).orElseThrow();
-        String token = jwtService.generateToken(coach);
+        String token = jwtService.generateToken(this.createExtraClaims(coach),coach);
         return AuthResponse.builder().token(token).build();
+    }
+
+    public HashMap<String,String>createExtraClaims(User user){
+        HashMap<String,String> claims = new HashMap<>();
+        claims.put("role",user.getRole().toString());
+        claims.put("email",user.getEmail());
+        claims.put("firstName",user.getFirstName());
+        claims.put("lastName",user.getLastName());
+        return claims;
     }
 
     public boolean emailTakenInClientOrCoach(String email){

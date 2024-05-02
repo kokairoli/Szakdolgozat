@@ -15,4 +15,23 @@ export class CoachService {
   listCoaches(): Observable<CoachDTO[]> {
     return this.http.get<CoachDTO[]>(environment.backendUrl + this.coachUrl);
   }
+
+  listClientsOfCoach(): Observable<UserDTO[]> {
+    return this.http.get<UserDTO[]>(
+      environment.backendUrl + this.coachUrl + '/clients'
+    );
+  }
+
+  getCoachOfClient(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(
+      environment.backendUrl + this.coachUrl + '/one'
+    );
+  }
+
+  removeClient(clientId: number): Observable<void> {
+    return this.http.patch<void>(
+      environment.backendUrl + this.coachUrl + '/clients',
+      clientId
+    );
+  }
 }

@@ -41,4 +41,17 @@ export class CoachingRequestService {
         coachRequestId
     );
   }
+
+  acceptCoachingRequest(coachRequestId: number): Observable<void> {
+    return this.http.patch<void>(
+      environment.backendUrl + this.coachingRequestUrl + '/coach/accept',
+      coachRequestId
+    );
+  }
+  refuseCoachingRequest(coachRequestId: number): Observable<void> {
+    return this.http.patch<void>(
+      environment.backendUrl + this.coachingRequestUrl + '/coach/refuse',
+      coachRequestId
+    );
+  }
 }

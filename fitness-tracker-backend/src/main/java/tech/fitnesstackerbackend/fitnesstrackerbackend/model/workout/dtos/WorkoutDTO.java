@@ -1,4 +1,4 @@
-package tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout;
+package tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout;
+package tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout.dtos;
 
 
 import lombok.Data;
@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class EditWorkoutDTO {
     private Long id;
+    private Integer clientId;
     private String name;
     private String comment;
     private String scheduled;

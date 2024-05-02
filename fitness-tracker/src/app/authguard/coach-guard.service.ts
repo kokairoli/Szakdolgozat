@@ -1,34 +1,36 @@
-import { Injectable, inject } from '@angular/core';
-import { UserService } from '../services/UserService/user.service';
+import { inject, Injectable } from '@angular/core';
+import { UserStorageService } from '../services/UserStorage/user-storage.service';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { UserStorageService } from '../services/UserStorage/user-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-class AuthenticationGuardService {
+export class CoachGuardService {
   private readonly userStorageService = inject(UserStorageService);
   private readonly router = inject(Router);
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.userStorageService.isLoggedIn()) {
+    if (
+      this.userStorageService.isLoggedIn() &&
+      !this.userStorageService.isClient()
+    ) {
       return true;
     }
-    this.router.navigate(['/welcome']);
+    this.router.navigate(['/home']);
     return false;
   }
 }
 
-export const AuthGuard: CanActivateFn = (
+export const CoachAuthGuard: CanActivateFn = (
   next: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ): boolean => {
-  return inject(AuthenticationGuardService).canActivate(next, state);
+  return inject(CoachGuardService).canActivate(next, state);
 };

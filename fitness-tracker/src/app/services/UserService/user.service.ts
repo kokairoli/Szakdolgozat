@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environment/environment';
-import { RegisterUserDTO } from '../model/UserDTOs/RegisterUserDTO';
-import { LoginUserDTO } from '../model/UserDTOs/LoginUserDTO';
+import { environment } from '../../environment/environment';
+import { RegisterUserDTO } from '../../model/UserDTOs/RegisterUserDTO';
+import { LoginUserDTO } from '../../model/UserDTOs/LoginUserDTO';
 import { Observable } from 'rxjs';
-import { AuthResponseDTO } from '../model/UserDTOs/AuthResponseDTO';
+import { AuthResponseDTO } from '../../model/UserDTOs/AuthResponseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -41,9 +41,5 @@ export class UserService {
       environment.backendUrl + this.authURL + '/coach/login',
       loginUserDTO
     );
-  }
-
-  isLoggedIn(): boolean {
-    return localStorage.getItem('access_token') !== null;
   }
 }

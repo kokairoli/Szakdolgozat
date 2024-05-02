@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditWeightComponent } from './edit-weight.component';
+import { ClientsComponent } from './clients.component';
 
-describe('EditWeightComponent', () => {
-  let component: EditWeightComponent;
-  let fixture: ComponentFixture<EditWeightComponent>;
+describe('ClientsComponent', () => {
+  let component: ClientsComponent;
+  let fixture: ComponentFixture<ClientsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ EditWeightComponent ]
+      imports: [ClientsComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(EditWeightComponent);
+    
+    fixture = TestBed.createComponent(ClientsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
