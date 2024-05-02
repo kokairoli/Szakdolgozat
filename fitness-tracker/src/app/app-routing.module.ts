@@ -8,6 +8,10 @@ import { ProgressComponent } from './components/progress/progress.component';
 import { ExerciseComponent } from './components/exercise/exercise.component';
 import { WorkoutComponent } from './components/workout/workout.component';
 import { CoachesComponent } from './components/coaches/coaches.component';
+import { ClientAuthGuard } from './authguard/client-guard.service';
+import { ClientsComponent } from './components/clients/clients.component';
+import { CoachAuthGuard } from './authguard/coach-guard.service';
+import { AssignWorkoutComponent } from './components/assign-workout/assign-workout.component';
 
 const routes: Routes = [
   {
@@ -20,10 +24,32 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'home', component: HomeComponent },
-      { path: 'progress', component: ProgressComponent },
+      {
+        path: 'progress',
+        component: ProgressComponent,
+        canActivate: [ClientAuthGuard],
+      },
       { path: 'exercises', component: ExerciseComponent },
-      { path: 'workout', component: WorkoutComponent },
-      { path: 'coaches', component: CoachesComponent },
+      {
+        path: 'workout',
+        component: WorkoutComponent,
+        canActivate: [ClientAuthGuard],
+      },
+      {
+        path: 'coaches',
+        component: CoachesComponent,
+        canActivate: [ClientAuthGuard],
+      },
+      {
+        path: 'clients',
+        component: ClientsComponent,
+        canActivate: [CoachAuthGuard],
+      },
+      {
+        path: 'assign-workout',
+        component: AssignWorkoutComponent,
+        canActivate: [CoachAuthGuard],
+      },
     ],
   },
 ];

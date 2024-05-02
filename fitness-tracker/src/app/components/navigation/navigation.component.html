@@ -6,6 +6,7 @@
   >
     Home
   </li>
+  @if (isClient) {
   <li
     (click)="navigateTo('/workout')"
     [nzSelected]="urlSegments[0] === 'workout'"
@@ -20,6 +21,15 @@
   >
     Progress
   </li>
+  }@else{
+  <li
+    (click)="navigateTo('/assign-workout')"
+    [nzSelected]="urlSegments[0] === 'assign-workout'"
+    nz-menu-item
+  >
+    Assign workout
+  </li>
+  }
 
   <li
     (click)="navigateTo('/exercises')"
@@ -28,6 +38,7 @@
   >
     Exercises
   </li>
+  @if (isClient) {
   <li
     (click)="navigateTo('/coaches')"
     [nzSelected]="urlSegments[0] === 'Coaches'"
@@ -35,5 +46,14 @@
   >
     Coaches
   </li>
+  }@else{
+  <li
+    (click)="navigateTo('/clients')"
+    [nzSelected]="urlSegments[0] === 'clients'"
+    nz-menu-item
+  >
+    Clients and requests
+  </li>
+  }
   <li style="float: right" (click)="logout()" nz-menu-item>Logout</li>
 </ul>

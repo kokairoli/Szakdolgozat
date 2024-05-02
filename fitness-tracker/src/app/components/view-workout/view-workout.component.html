@@ -1,0 +1,43 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="modalTitle"
+  [nzContent]="modalContent"
+  [nzFooter]="modalFooter"
+  (nzOnCancel)="handleCancel()"
+>
+  <ng-template #modalTitle>{{ workout?.name }}</ng-template>
+  <ng-template #modalContent>
+    <div class="content">
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 0.2rem;
+        "
+      >
+        <h3 style="margin: 0">Scheduled:</h3>
+        <span>{{ workout?.scheduled }}</span>
+      </div>
+      <h3>Comment</h3>
+      <span>{{ workout?.comment }}</span>
+      <h3>Exercises</h3>
+      <ol type="1">
+        @for (exerciseSet of workout?.sets; track $index) {
+
+        <li>
+          <span
+            >{{ exerciseSet.exercise.name }}: {{ exerciseSet.numberOfSets }}X{{
+              exerciseSet.numberOfReps
+            }}</span
+          >
+        </li>
+        }
+      </ol>
+    </div>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button (click)="handleCancel()" nz-button>Close</button>
+  </ng-template>
+</nz-modal>

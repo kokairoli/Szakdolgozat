@@ -8,8 +8,11 @@ import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.CreateE
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.EditExerciseSetDTO;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.ExerciseSet;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.exerciseset.ExerciseSetService;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.ClientService;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachService;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout.dtos.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -67,6 +70,18 @@ public class WorkoutService {
         return translateWorkoutToWorkoutDTO(workoutRepository.save(w));
     }
 
+    public List<WorkoutCoachDTO> getWorkoutsOfCoachGroupedByClients(){
+        Coach coach = coachService.getLoggedInCoach();
+        List<WorkoutCoachDTO> workoutCoachDTOList = new ArrayList<>();
+        for (Client client:coach.getClients()){
+            WorkoutCoachDTO workoutCoachDTO = new WorkoutCoachDTO(clientService.translateClientToUserDTO(client),getAllWorkoutFromCoachByClientId(coach.getId(),client.getId()));
+            workoutCoachDTOList.add(workoutCoachDTO);
+        }
+        return workoutCoachDTOList;
+    }
+
+
+
     public WorkoutDTO createWorkoutFromCoachToUser(CreateWorkoutCoachDTO createWorkoutCoachDTO){
         Workout w = new Workout();
 
@@ -91,6 +106,10 @@ public class WorkoutService {
             w.get().setName(editWorkoutDTO.getName());
             w.get().setComment(editWorkoutDTO.getComment());
             w.get().setScheduled(LocalDateTime.parse(editWorkoutDTO.getScheduled(),isoFormatter));
+            if (editWorkoutDTO.getClientId() != null){
+                Client newClient = clientService.getClientById(editWorkoutDTO.getClientId());
+                w.get().setClient(newClient);
+            }
 
             for (int i = 0; i < editWorkoutDTO.getForDeleteSetIds().size(); i++) {
                 final Long setId = editWorkoutDTO.getForDeleteSetIds().get(i);
@@ -116,21 +135,6 @@ public class WorkoutService {
         throw new IllegalArgumentException();
     }
 
-
-
-
-    public WorkoutDTO addSetToWorkout(AddExerciseSetDTO addExerciseSetDTO){
-        Optional<Workout> w = workoutRepository.findById(addExerciseSetDTO.getWorkoutId());
-
-        if (w.isPresent()){
-
-            w.get().getSets().add(exerciseSetService.createSet(addExerciseSetDTO.getCreateExerciseSetDTO()));
-            return translateWorkoutToWorkoutDTO(workoutRepository.save(w.get()));
-        }
-
-        throw new IllegalArgumentException();
-    }
-
     public WorkoutDTO addCommentToWorkout(AddCommentDTO addCommentDTO){
         Workout workout = workoutRepository.findById(addCommentDTO.getId()).orElseThrow();
         workout.setComment(addCommentDTO.getComment());
@@ -141,6 +145,10 @@ public class WorkoutService {
 
     public List<WorkoutDTO> getAllWorkoutFromCoachByClientId(Integer clientId){
         return workoutRepository.findByCoachAndClientId(coachService.getLoggedInUserId(),clientId).stream().map(this::translateWorkoutToWorkoutDTO).toList();
+    }
+
+    public List<WorkoutOfCoachDTO> getAllWorkoutFromCoachByClientId(Integer coachId, Integer clientId){
+        return workoutRepository.findByCoachAndClientId(coachService.getLoggedInUserId(),clientId).stream().map(this::translateWorkoutToWorkoutOfCoachDTO).toList();
     }
 
     public List<WorkoutDTO> getWorkoutForClientCurrentMonth(){
@@ -179,6 +187,10 @@ public class WorkoutService {
 
     public WorkoutDTO translateWorkoutToWorkoutDTO(Workout workout){
         return new WorkoutDTO(workout.getId(),workout.getName(), workout.getComment(), workout.isCoachWorkout(), workout.isFinished(),workout.getSets(), coachService.translateCoachToUserDTO(workout.getCoach()),workout.getScheduled().format(isoFormatter));
+    }
+
+    public WorkoutOfCoachDTO translateWorkoutToWorkoutOfCoachDTO(Workout workout){
+        return new WorkoutOfCoachDTO(workout.getId(),workout.getName(), workout.getComment(),workout.getClient().getId(),  workout.isFinished(),workout.getSets(),workout.getScheduled().format(isoFormatter));
     }
 
 }

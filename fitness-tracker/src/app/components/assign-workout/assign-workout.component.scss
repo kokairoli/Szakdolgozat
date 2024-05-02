@@ -1,0 +1,35 @@
+.workout-container {
+  padding: var(--default-container-padding);
+}
+
+.action-column {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.button-container > div {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.calendar-button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.calendar-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}

@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
 import { RemoveExerciseSetDTO } from '../../model/WorkoutDTOs/RemoveExerciseSetDTO';
 import { EditWorkoutDTO } from 'src/app/model/WorkoutDTOs/EditWorkoutDTO';
+import { WorkoutCoachDTO } from 'src/app/model/WorkoutDTOs/WorkoutCoachDTO';
+import { CreateWorkoutCoachDTO } from 'src/app/model/WorkoutDTOs/CreateWorkoutCoachDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +19,15 @@ export class WorkoutService {
   createWorkout(createWorkoutDTO: CreateWorkoutDTO): Observable<WorkoutDTO> {
     return this.http.post<WorkoutDTO>(
       environment.backendUrl + this.workoutURL + '/client',
+      createWorkoutDTO
+    );
+  }
+
+  createCoachWorkout(
+    createWorkoutDTO: CreateWorkoutCoachDTO
+  ): Observable<WorkoutDTO> {
+    return this.http.post<WorkoutDTO>(
+      environment.backendUrl + this.workoutURL + '/coach',
       createWorkoutDTO
     );
   }
@@ -51,6 +62,12 @@ export class WorkoutService {
   getClientWorkouts(): Observable<WorkoutDTO[]> {
     return this.http.get<WorkoutDTO[]>(
       environment.backendUrl + this.workoutURL + '/client'
+    );
+  }
+
+  getWorkoutsOfCoachGroupedByClients(): Observable<WorkoutCoachDTO[]> {
+    return this.http.get<WorkoutCoachDTO[]>(
+      environment.backendUrl + this.workoutURL + '/coach'
     );
   }
 

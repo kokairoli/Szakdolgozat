@@ -9,6 +9,7 @@ import { forkJoin } from 'rxjs';
 import { CoachingRequestDTO } from 'src/app/model/CoachingRequestDTOs/CoachingRequestDTO';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CreateRequestComponent } from './create-request/create-request.component';
+import { UserDTO } from 'src/app/model/UserDTOs/UserDTO';
 
 export interface CoachesWithRequests {
   id: number;
@@ -39,6 +40,7 @@ export class CoachesComponent implements OnInit {
   filteredCoaches: CoachesWithRequests[] = [];
   coachingRequests: CoachingRequestDTO[] = [];
   selectedCoach?: CoachesWithRequests;
+  coachOfClient?: UserDTO;
   isVisible = false;
 
   mode: 'create' | 'edit' = 'create';
@@ -53,7 +55,8 @@ export class CoachesComponent implements OnInit {
     forkJoin([
       this.coachService.listCoaches(),
       this.coachingRequestService.getRequestsOfClient(),
-    ]).subscribe(([coaches, requests]) => {
+      this.coachService.getCoachOfClient(),
+    ]).subscribe(([coaches, requests, coachOfClient]) => {
       this.coaches = coaches.map((coach) => {
         return {
           ...coach,
@@ -65,6 +68,7 @@ export class CoachesComponent implements OnInit {
 
       this.filteredCoaches = [...this.coaches];
       this.coachingRequests = requests;
+      this.coachOfClient = coachOfClient;
       this.filterCoaches(this.filterName);
       console.log(this.filteredCoaches);
     });

@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.client.Client;
 
@@ -20,8 +18,7 @@ public class Coach extends User {
 
 
 
-    @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "coach", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Client> clients = new ArrayList<>();
 
@@ -36,5 +33,9 @@ public class Coach extends User {
 
     public void removeClient(Client client){
         clients.remove(client);
+    }
+
+    public List<Client> getClients(){
+        return clients;
     }
 }

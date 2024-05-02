@@ -3,6 +3,7 @@ package tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.comment.AddCommentDTO;
+import tech.fitnesstackerbackend.fitnesstrackerbackend.model.workout.dtos.*;
 
 import java.util.List;
 
@@ -68,6 +69,11 @@ public class WorkoutController {
     @GetMapping("coach/{clientId}")
     public List<WorkoutDTO> getWorkoutsForCoach(@PathVariable String clientId){
         return workoutService.getAllWorkoutFromCoachByClientId(Integer.parseInt(clientId));
+    }
+
+    @GetMapping("coach")
+    public List<WorkoutCoachDTO> getWorkoutsOfCoachGroupedByClients(){
+        return workoutService.getWorkoutsOfCoachGroupedByClients();
     }
 
     @PatchMapping("comment")

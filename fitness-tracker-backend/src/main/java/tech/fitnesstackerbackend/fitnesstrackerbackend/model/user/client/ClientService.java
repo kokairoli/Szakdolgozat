@@ -8,19 +8,18 @@ import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.User;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserDTO;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.UserService;
 import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.Coach;
-import tech.fitnesstackerbackend.fitnesstrackerbackend.model.user.coach.CoachService;
+
+import java.util.List;
 
 @Service
 public class ClientService extends UserService {
 
     private final ClientRepository clientRepository;
 
-    private final CoachService coachService;
 
     @Autowired
-    public ClientService(ClientRepository clientRepository, CoachService coachService) {
+    public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.coachService = coachService;
     }
 
     public boolean userExists(String email){
@@ -36,8 +35,15 @@ public class ClientService extends UserService {
         return principal.toString();
     }
 
+    public List<UserDTO> getClientsOfCoach(Integer coachId){
+        return clientRepository.findAllByCoachId(coachId).stream().map(this::translateClientToUserDTO).toList();
+    }
+
     public Client getLoggedInClient(){
         return clientRepository.findByEmail(getEmailFromSecurityContext()).orElseThrow();
+    }
+    public Client saveClient(Client client){
+        return clientRepository.save(client);
     }
 
     public Integer getLoggedInUserId(){
@@ -54,10 +60,6 @@ public class ClientService extends UserService {
     }
 
 
-
-    public void deleteCoach(Integer coachId){
-        coachService.removedClient(getLoggedInClient(),coachService.getCoachById(coachId));
-    }
 
     public void deletedCoach(){}
 

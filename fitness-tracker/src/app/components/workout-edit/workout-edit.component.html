@@ -7,9 +7,11 @@
 >
   <ng-template #modalTitle>{{ title }}</ng-template>
   <ng-template #modalContent>
-    <form [formGroup]="workoutFormGroup">
+    <form [formGroup]="isCoach ? coachWorkoutFormGroup : workoutFormGroup">
       <div class="basic-form-inputs">
-        <input nz-input placeholder="Name" type="text" formControlName="name" />
+        <nz-form-control nzErrorTip="Name cannot be empty!">
+          <input nz-input placeholder="Name" type="text" formControlName="name"
+        /></nz-form-control>
         <textarea
           placeholder="Comment"
           rows="4"
@@ -25,6 +27,17 @@
           ></nz-date-picker>
         </div>
       </div>
+      @if (isCoach) {
+      <nz-form-control nzErrorTip="You select a client!">
+        <nz-select formControlName="clientId" [nzSize]="size" nzShowSearch>
+          <nz-option
+            *ngFor="let option of clientsOfCoach"
+            [nzLabel]="option.lastName + ' ' + option.firstName"
+            [nzValue]="option.id"
+          ></nz-option>
+        </nz-select>
+      </nz-form-control>
+      }
       <div formArrayName="exerciseSet">
         <h2>Exercises</h2>
         <div
@@ -43,25 +56,29 @@
             type="number"
             formControlName="numberOfReps"
           />
-          <input
-            nz-input
-            placeholder="Sets"
-            type="number"
-            formControlName="numberOfSets"
-          />
+          <nz-form-control nzErrorTip="Must be grater than 0!">
+            <input
+              nz-input
+              placeholder="Sets"
+              type="number"
+              formControlName="numberOfSets"
+            />
+          </nz-form-control>
           <div style="display: flex; flex-direction: row">
-            <nz-select
-              formControlName="exerciseId"
-              [nzSize]="size"
-              style="width: 100%"
-              nzShowSearch
-            >
-              <nz-option
-                *ngFor="let option of exercises"
-                [nzLabel]="option.name"
-                [nzValue]="option.id"
-              ></nz-option>
-            </nz-select>
+            <nz-form-control nzErrorTip="You must choose an exercise!">
+              <nz-select
+                formControlName="exerciseId"
+                [nzSize]="size"
+                style="width: 100%"
+                nzShowSearch
+              >
+                <nz-option
+                  *ngFor="let option of exercises"
+                  [nzLabel]="option.name"
+                  [nzValue]="option.id"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
             <button
               style="margin-left: 0.6rem"
               nz-button
@@ -91,7 +108,10 @@
     <button
       nz-button
       nzType="primary"
-      [disabled]="!workoutFormGroup.valid || !exerciseSets.valid"
+      [disabled]="
+        (isCoach ? !coachWorkoutFormGroup.valid : !workoutFormGroup.valid) ||
+        !exerciseSets.valid
+      "
       (click)="handleSave()"
     >
       Save

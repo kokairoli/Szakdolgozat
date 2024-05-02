@@ -44,8 +44,9 @@ public class CoachingRequestService {
         }
         coachingRequest.setCoach(coach);
         coachingRequest.setClient(client);
-        coachingRequest.setActive(true);
         coachingRequest.setCreated_at(new Date());
+        coachingRequest.setActive(true);
+        coachingRequest.setAccepted(false);
         return this.translateToCoachingRequestDTOForClient(coachingRequestRepository.save(coachingRequest));
 
     }
@@ -56,8 +57,7 @@ public class CoachingRequestService {
         Client client = clientService.getClientById(coachingRequest.getClient().getId());
         clientService.saveCoachForClient(client,coach);
         coachService.addClientToClients(client);
-        coachingRequest.setAccepted(true);
-        inactivateAndSaveRequestsOfClient(client);
+        coachingRequestRepository.delete(coachingRequest);
     }
 
     public void refuseCoachingRequest(Long coachingRequestId){
@@ -67,33 +67,20 @@ public class CoachingRequestService {
         coachingRequestRepository.save(coachingRequest);
     }
 
-    public CoachingRequest activateCoachingRequest(Long coachingRequestId){
-        CoachingRequest coachingRequest = coachingRequestRepository.findById(coachingRequestId).orElseThrow();
-        coachingRequest.setActive(true);
-        return coachingRequestRepository.save(coachingRequest);
-    }
 
     public void deleteCoachingRequest(Long coachingRequestId){
         CoachingRequest coachingRequest = coachingRequestRepository.findById(coachingRequestId).orElseThrow();
         coachingRequestRepository.delete(coachingRequest);
     }
 
-    private void inactivateAndSaveRequestsOfClient(Client client){
-        List<CoachingRequest> clientCoachingRequests = coachingRequestRepository.findAllByClientId(client.getId());
-        for (CoachingRequest clientCoachingRequest : clientCoachingRequests) {
-            if (clientCoachingRequest.isActive()&&!clientCoachingRequest.isAccepted()) {
-                clientCoachingRequest.setActive(false);
-            }
-        }
-        coachingRequestRepository.saveAll(clientCoachingRequests);
-    }
+
 
     public CoachingRequestDTO translateToCoachingRequestDTOForCoach(CoachingRequest coachingRequest){
         return new CoachingRequestDTO(coachingRequest.getId(),coachingRequest.isActive(),coachingRequest.isAccepted(),coachingRequest.getMessage(),clientService.translateClientToUserDTO( coachingRequest.getClient()));
     }
 
     public CoachingRequestDTO translateToCoachingRequestDTOForClient(CoachingRequest coachingRequest){
-        return new CoachingRequestDTO(coachingRequest.getId(),coachingRequest.isActive(),coachingRequest.isAccepted(),coachingRequest.getMessage(),coachService.translateCoachToUserDTO( coachingRequest.getCoach()));
+        return new CoachingRequestDTO(coachingRequest.getId(), coachingRequest.isActive(), coachingRequest.isAccepted(),coachingRequest.getMessage(),coachService.translateCoachToUserDTO( coachingRequest.getCoach()));
     }
 
 

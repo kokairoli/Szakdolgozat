@@ -29,11 +29,16 @@
           <span>{{ coach.numberOfClients }}</span>
         </div>
         <div class="action-button-container">
-          <a *ngIf="coach.coachRequest" style="text-align: center"
-            >Request was sent</a
-          >
+          @if (coach.coachRequest && !coach.coachRequest.accepted &&
+          coach.coachRequest.active) {
+          <a style="text-align: center">Request was sent</a>
+          }@else if(coach.coachRequest&&!coach.coachRequest.accepted &&
+          !coach.coachRequest.active){
+          <a style="text-align: center">Request was denied</a>
+          }
           <div *ngIf="!coach.coachRequest">&nbsp;</div>
           <div class="button-container">
+            @if (!coachOfClient) {
             <button
               *ngIf="!coach.coachRequest"
               (click)="openCreateRequestWindow(coach)"
@@ -43,6 +48,8 @@
               Send coaching request
             </button>
 
+            }@else if(coach.coachRequest && !coach.coachRequest.accepted &&
+            coach.coachRequest.active){
             <button
               (click)="deleteRequest(coach.coachRequest.id)"
               *ngIf="coach.coachRequest"
@@ -52,6 +59,7 @@
             >
               Delete coach request
             </button>
+            }
           </div>
         </div>
       </div>

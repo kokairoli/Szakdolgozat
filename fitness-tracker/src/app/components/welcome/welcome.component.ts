@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -6,9 +6,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/UserService/user.service';
 import { AuthResponseDTO } from 'src/app/model/UserDTOs/AuthResponseDTO';
 import { Router } from '@angular/router';
+import { UserStorageService } from 'src/app/services/UserStorage/user-storage.service';
 
 @Component({
   selector: 'app-welcome',
@@ -20,11 +21,16 @@ import { Router } from '@angular/router';
     NzInputModule,
     ReactiveFormsModule,
     NzButtonModule,
+    NzButtonModule,
   ],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent {
+  private readonly userStorageService = inject(UserStorageService);
+
+  clientFormsShown = true;
+
   clientLoginFormGroup: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
@@ -64,8 +70,7 @@ export class WelcomeComponent {
         password: this.clientRegisterFormGroup.get('password')?.value,
       })
       .subscribe((response: AuthResponseDTO) => {
-        localStorage.setItem('access_token', response.token);
-        this.router.navigate(['/home']);
+        this.saveUserAndNavigateToHome(response);
       });
   }
 
@@ -78,10 +83,15 @@ export class WelcomeComponent {
           password: this.clientLoginFormGroup.get('password')?.value,
         })
         .subscribe((response: AuthResponseDTO) => {
-          localStorage.setItem('access_token', response.token);
-          this.router.navigate(['/home']);
+          this.saveUserAndNavigateToHome(response);
         });
     }
+  }
+
+  saveUserAndNavigateToHome(response: AuthResponseDTO) {
+    localStorage.setItem('access_token', response.token);
+    this.userStorageService.setLoggedInUser();
+    this.router.navigate(['/home']);
   }
 
   registerCoach() {
@@ -94,8 +104,7 @@ export class WelcomeComponent {
         password: this.coachRegisterFormGroup.get('password')?.value,
       })
       .subscribe((response: AuthResponseDTO) => {
-        localStorage.setItem('access_token', response.token);
-        this.router.navigate(['/home']);
+        this.saveUserAndNavigateToHome(response);
       });
   }
 
@@ -108,8 +117,7 @@ export class WelcomeComponent {
           password: this.coachLoginFormGroup.get('password')?.value,
         })
         .subscribe((response: AuthResponseDTO) => {
-          localStorage.setItem('access_token', response.token);
-          this.router.navigate(['/home']);
+          this.saveUserAndNavigateToHome(response);
         });
     }
   }
