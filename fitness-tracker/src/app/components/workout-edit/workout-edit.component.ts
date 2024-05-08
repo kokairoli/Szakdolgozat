@@ -36,6 +36,8 @@ import { CoachService } from 'src/app/services/CoachService/coach.service';
 import { UserDTO } from 'src/app/model/UserDTOs/UserDTO';
 import { WorkoutOfCoachDTO } from 'src/app/model/WorkoutDTOs/WorkoutOfCoachDTO';
 import { CreateWorkoutCoachDTO } from 'src/app/model/WorkoutDTOs/CreateWorkoutCoachDTO';
+import { differenceInCalendarDays } from 'date-fns';
+import { InputErrorComponent } from '../input-error/input-error.component';
 
 interface EditCreateExerciseSet {
   id: number;
@@ -58,6 +60,7 @@ interface EditCreateExerciseSet {
     NzIconModule,
     NzSelectModule,
     NzFormModule,
+    InputErrorComponent,
   ],
   templateUrl: './workout-edit.component.html',
   styleUrls: ['./workout-edit.component.scss'],
@@ -101,6 +104,10 @@ export class WorkoutEditComponent implements OnInit, OnChanges {
     clientId: new FormControl<number | null>(null, [Validators.required]),
     exerciseSet: this.fb.array<EditCreateExerciseSet>([]),
   });
+
+  disabledDate = (current: Date): boolean =>
+    differenceInCalendarDays(current, this.today) < 0;
+  today = new Date();
 
   timeZoneOffset = new Date().getTimezoneOffset() * -1;
 
@@ -150,9 +157,15 @@ export class WorkoutEditComponent implements OnInit, OnChanges {
       this.workout?.sets.forEach((set) => {
         const newexerciseSet = this.fb.group({
           id: set.id,
-          numberOfReps: set.numberOfReps,
-          numberOfSets: set.numberOfSets,
-          exerciseId: set.exercise.id,
+          numberOfReps: new FormControl(set.numberOfReps, [
+            Validators.required,
+            Validators.min(1),
+          ]),
+          numberOfSets: new FormControl(set.numberOfSets, [
+            Validators.required,
+            Validators.min(1),
+          ]),
+          exerciseId: new FormControl(set.exercise.id, [Validators.required]),
         });
         this.exerciseSets.push(newexerciseSet);
       });
@@ -168,9 +181,15 @@ export class WorkoutEditComponent implements OnInit, OnChanges {
       this.workout?.sets.forEach((set) => {
         const newexerciseSet = this.fb.group({
           id: set.id,
-          numberOfReps: set.numberOfReps,
-          numberOfSets: set.numberOfSets,
-          exerciseId: set.exercise.id,
+          numberOfReps: new FormControl(set.numberOfReps, [
+            Validators.required,
+            Validators.min(1),
+          ]),
+          numberOfSets: new FormControl(set.numberOfSets, [
+            Validators.required,
+            Validators.min(1),
+          ]),
+          exerciseId: new FormControl(set.exercise.id, [Validators.required]),
         });
         this.exerciseSets.push(newexerciseSet);
       });
@@ -336,6 +355,25 @@ export class WorkoutEditComponent implements OnInit, OnChanges {
     } else {
       return this.coachWorkoutFormGroup.controls['exerciseSet'] as FormArray;
     }
+  }
+
+  private getExerciseSet(index: number) {
+    return this.exerciseSets.at(index) as FormGroup;
+  }
+
+  isExerciseSetValid(index: number) {
+    const exerciseSet = this.getExerciseSet(index) as FormGroup;
+    if (
+      (exerciseSet.controls['numberOfReps'].invalid &&
+        exerciseSet.controls['numberOfReps'].touched) ||
+      (exerciseSet.controls['numberOfSets'].invalid &&
+        exerciseSet.controls['numberOfSets'].touched) ||
+      (exerciseSet.controls['exerciseId'].invalid &&
+        exerciseSet.controls['exerciseId'].touched)
+    ) {
+      return false;
+    }
+    return true;
   }
 
   addExerciseSet() {

@@ -18,55 +18,64 @@
     </div>
     @if (clientFormsShown) {
     <div class="client-forms">
-      <nz-card style="width: 300px" nzTitle="Client login">
+      <nz-card style="width: 450px" nzTitle="Client login">
         <form
           nz-form
-          [nzLayout]="'inline'"
+          [nzLayout]="'vertical'"
           [formGroup]="clientLoginFormGroup"
           (ngSubmit)="loginClient()"
         >
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Email!">
-              <nz-input-group nzPrefixIcon="mail">
-                <input formControlName="email" nz-input placeholder="Email" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Password!">
-              <nz-input-group nzPrefixIcon="lock">
-                <input
-                  formControlName="password"
-                  nz-input
-                  type="password"
-                  placeholder="Password"
-                />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control>
-              <button
-                nz-button
-                nzType="primary"
-                [disabled]="!clientLoginFormGroup.valid"
-              >
-                Log in
-              </button>
-            </nz-form-control>
-          </nz-form-item>
+          <nz-input-group nzPrefixIcon="mail">
+            <input formControlName="email" nz-input placeholder="Email" />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !clientLoginFormGroup.get('email')?.valid &&
+              (clientLoginFormGroup.get('email')?.touched ?? false)
+            "
+            [errorMessage]="'Email cannot be empty and must be valid!'"
+          ></app-input-error>
+
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              formControlName="password"
+              nz-input
+              type="password"
+              placeholder="Password"
+            />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !clientLoginFormGroup.get('password')?.valid &&
+              (clientLoginFormGroup.get('password')?.touched ?? false)
+            "
+            [errorMessage]="'Password cannot be empty!'"
+          ></app-input-error>
+          <nz-form-control>
+            <button
+              nz-button
+              nzType="primary"
+              [disabled]="!clientLoginFormGroup.valid"
+            >
+              Log in
+            </button>
+          </nz-form-control>
+          <app-input-error
+            [showError]="authErrors.clientLogin !== ''"
+            [errorMessage]="authErrors.clientLogin"
+          ></app-input-error>
         </form>
       </nz-card>
 
-      <nz-card style="width: 300px" nzTitle="Client register">
+      <nz-card style="width: 450px" nzTitle="Client register">
         <form
           nz-form
-          [nzLayout]="'inline'"
+          [nzLayout]="'vertical'"
           [formGroup]="clientRegisterFormGroup"
           (ngSubmit)="registerClient()"
         >
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your first name!">
+          <div class="name-div">
+            <div class="name-input">
               <nz-input-group nzPrefixIcon="user">
                 <input
                   formControlName="firstName"
@@ -74,10 +83,16 @@
                   placeholder="First name"
                 />
               </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your last name!">
+              <app-input-error
+                [showError]="
+                  !clientRegisterFormGroup.get('firstName')?.valid &&
+                  (clientRegisterFormGroup.get('firstName')?.touched ?? false)
+                "
+                [errorMessage]="'Firstname cannot be empty !'"
+              ></app-input-error>
+            </div>
+
+            <div class="name-input">
               <nz-input-group nzPrefixIcon="user">
                 <input
                   formControlName="lastName"
@@ -85,104 +100,135 @@
                   placeholder="Last name"
                 />
               </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Email!">
-              <nz-input-group nzPrefixIcon="mail">
-                <input formControlName="email" nz-input placeholder="Email" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Password!">
-              <nz-input-group nzPrefixIcon="lock">
-                <input
-                  formControlName="password"
-                  nz-input
-                  type="password"
-                  placeholder="Password"
-                />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control>
-              <button
-                nz-button
-                nzType="primary"
-                [disabled]="!clientRegisterFormGroup.valid"
-              >
-                Register
-              </button>
-            </nz-form-control>
-          </nz-form-item>
+              <app-input-error
+                [showError]="
+                  !clientRegisterFormGroup.get('lastName')?.valid &&
+                  (clientRegisterFormGroup.get('lastName')?.touched ?? false)
+                "
+                [errorMessage]="'Lastname cannot be empty!'"
+              ></app-input-error>
+            </div>
+          </div>
+
+          <nz-input-group nzPrefixIcon="mail">
+            <input formControlName="email" nz-input placeholder="Email" />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !clientRegisterFormGroup.get('email')?.valid &&
+              (clientRegisterFormGroup.get('email')?.touched ?? false)
+            "
+            [errorMessage]="'Email cannot be empty and must be valid!'"
+          ></app-input-error>
+
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              formControlName="password"
+              nz-input
+              type="password"
+              placeholder="Password"
+            />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !clientRegisterFormGroup.get('password')?.valid &&
+              (clientRegisterFormGroup.get('password')?.touched ?? false)
+            "
+            [errorMessage]="'Password cannot be empty!'"
+          ></app-input-error>
+
+          <nz-form-control>
+            <button
+              nz-button
+              nzType="primary"
+              [disabled]="!clientRegisterFormGroup.valid"
+            >
+              Register
+            </button>
+          </nz-form-control>
+          <app-input-error
+            [showError]="authErrors.clientRegister !== ''"
+            [errorMessage]="authErrors.clientRegister"
+          ></app-input-error>
         </form>
       </nz-card>
     </div>
 
     }@else{
     <div class="coach-forms">
-      <nz-card style="width: 300px" nzTitle="Coach login">
+      <nz-card style="width: 450px" nzTitle="Coach login">
         <form
           nz-form
-          [nzLayout]="'inline'"
+          [nzLayout]="'vertical'"
           [formGroup]="coachLoginFormGroup"
           (ngSubmit)="loginCoach()"
         >
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Email!">
-              <nz-input-group nzPrefixIcon="mail">
-                <input formControlName="email" nz-input placeholder="Email" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Password!">
-              <nz-input-group nzPrefixIcon="lock">
-                <input
-                  formControlName="password"
-                  nz-input
-                  type="password"
-                  placeholder="Password"
-                />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control>
-              <button
-                nz-button
-                nzType="primary"
-                [disabled]="!coachLoginFormGroup.valid"
-              >
-                Log in
-              </button>
-            </nz-form-control>
-          </nz-form-item>
+          <nz-input-group nzPrefixIcon="mail">
+            <input formControlName="email" nz-input placeholder="Email" />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !coachLoginFormGroup.get('email')?.valid &&
+              (coachLoginFormGroup.get('email')?.touched ?? false)
+            "
+            [errorMessage]="'Email cannot be empty and must be valid!'"
+          ></app-input-error>
+
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              formControlName="password"
+              nz-input
+              type="password"
+              placeholder="Password"
+            />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !coachLoginFormGroup.get('password')?.valid &&
+              (coachLoginFormGroup.get('password')?.touched ?? false)
+            "
+            [errorMessage]="'Password cannot be empty!'"
+          ></app-input-error>
+          <nz-form-control>
+            <button
+              nz-button
+              nzType="primary"
+              [disabled]="!coachLoginFormGroup.valid"
+            >
+              Log in
+            </button>
+          </nz-form-control>
+          <app-input-error
+            [showError]="authErrors.coachLogin !== ''"
+            [errorMessage]="authErrors.coachLogin"
+          ></app-input-error>
         </form>
       </nz-card>
 
-      <nz-card style="width: 300px" nzTitle="Coach register">
+      <nz-card style="width: 450px" nzTitle="Coach register">
         <form
           nz-form
-          [nzLayout]="'inline'"
+          [nzLayout]="'vertical'"
           [formGroup]="coachRegisterFormGroup"
           (ngSubmit)="registerCoach()"
         >
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your first name!">
+          <div class="name-div">
+            <div class="name-input">
               <nz-input-group nzPrefixIcon="user">
                 <input
                   formControlName="firstName"
                   nz-input
                   placeholder="First name"
-                />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your last name!">
+                /> </nz-input-group
+              ><app-input-error
+                [showError]="
+                  !coachRegisterFormGroup.get('firstName')?.valid &&
+                  (coachRegisterFormGroup.get('firstName')?.touched ?? false)
+                "
+                [errorMessage]="'Firstname cannot be empty!'"
+              ></app-input-error>
+            </div>
+            <div class="name-input">
               <nz-input-group nzPrefixIcon="user">
                 <input
                   formControlName="lastName"
@@ -190,44 +236,62 @@
                   placeholder="Last name"
                 />
               </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Email!">
-              <nz-input-group nzPrefixIcon="mail">
-                <input formControlName="email" nz-input placeholder="Email" />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Please input your Password!">
-              <nz-input-group nzPrefixIcon="lock">
-                <input
-                  formControlName="password"
-                  nz-input
-                  type="password"
-                  placeholder="Password"
-                />
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-          <nz-form-item>
-            <nz-form-control>
-              <button
-                nz-button
-                nzType="primary"
-                [disabled]="!coachRegisterFormGroup.valid"
-              >
-                Register
-              </button>
-            </nz-form-control>
-          </nz-form-item>
+              <app-input-error
+                [showError]="
+                  !coachRegisterFormGroup.get('lastName')?.valid &&
+                  (coachRegisterFormGroup.get('lastName')?.touched ?? false)
+                "
+                [errorMessage]="'Lastname cannot be empty!'"
+              ></app-input-error>
+            </div>
+          </div>
+
+          <nz-input-group nzPrefixIcon="mail">
+            <input formControlName="email" nz-input placeholder="Email" />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !coachRegisterFormGroup.get('email')?.valid &&
+              (coachRegisterFormGroup.get('email')?.touched ?? false)
+            "
+            [errorMessage]="'Email cannot be empty and must be valid!'"
+          ></app-input-error>
+
+          <nz-input-group nzPrefixIcon="lock">
+            <input
+              formControlName="password"
+              nz-input
+              type="password"
+              placeholder="Password"
+            />
+          </nz-input-group>
+          <app-input-error
+            [showError]="
+              !coachRegisterFormGroup.get('password')?.valid &&
+              (coachRegisterFormGroup.get('password')?.touched ?? false)
+            "
+            [errorMessage]="'Password cannot be empty!'"
+          ></app-input-error>
+          <nz-form-control>
+            <button
+              nz-button
+              nzType="primary"
+              [disabled]="!coachRegisterFormGroup.valid"
+            >
+              Register
+            </button>
+          </nz-form-control>
+          <app-input-error
+            [showError]="authErrors.coachRegister !== ''"
+            [errorMessage]="authErrors.coachRegister"
+          ></app-input-error>
         </form>
       </nz-card>
     </div>
     }
   </div>
   <div class="logo">
+    <h1>Fitness tracker application</h1>
     <img
       style="width: 40vw; height: 40vh"
       src="../../../assets/images/logo.jfif"

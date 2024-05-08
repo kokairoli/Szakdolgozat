@@ -21,6 +21,12 @@
             [formControl]="addWeightFormControl"
           />
         </div>
+        <app-input-error
+          [showError]="
+            !addWeightFormControl.valid && addWeightFormControl.touched
+          "
+          [errorMessage]="'Must provide weight'"
+        ></app-input-error>
       </ng-template>
       <ng-template #modalFooter>
         <button
@@ -88,7 +94,15 @@
         }
       </div>
       <h3>Current weight</h3>
-      <div>{{ currentWeight?.weight }}</div>
+      <div
+        [class.goal-weight-achieved]="
+          currentWeight?.weight &&
+          clientGoal?.targetWeight &&
+          (currentWeight?.weight ?? 0) <= (clientGoal?.targetWeight ?? -1)
+        "
+      >
+        {{ currentWeight?.weight }}
+      </div>
       <h3>Smallest weight</h3>
       <div>{{ smallestWeight }}</div>
       <h3>Biggest weight</h3>
@@ -103,14 +117,6 @@
       [nzCustomHeader]="customHeader"
       [nzDateCell]="dateCellTpl"
     >
-      <!-- <div *nzDateCell>
-        <span
-          nz-icon
-          [nzType]="'check-circle'"
-          [nzTheme]="'twotone'"
-          [nzTwotoneColor]="'#52c41a'"
-        ></span>
-      </div> -->
     </nz-calendar>
     <ng-template #dateCellTpl let-date>
       @switch (areAllWorkoutFinishedInADay(date)) { @case ('finished'){
@@ -170,7 +176,7 @@
           nz-button
           nzType="primary"
           nzShape="circle"
-          [disabled]="!weightGoalFormControl.valid"
+          [disabled]="!workoutGoalFormControl.valid"
           (click)="saveWorkoutGoal()"
         >
           <span nz-icon nzType="check" nzTheme="outline"></span>

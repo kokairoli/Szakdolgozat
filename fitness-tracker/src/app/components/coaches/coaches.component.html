@@ -1,68 +1,98 @@
+<app-create-request
+  [title]="
+    mode === 'create'
+      ? 'Create coaching request'
+      : 'Edit coaching request message'
+  "
+  [coach]="selectedCoach"
+  [isVisible]="isVisible"
+  (closeModal)="isVisible = false"
+  (dataChanged)="handleSave()"
+></app-create-request>
 <div class="coach-container">
-  <app-create-request
-    [title]="
-      mode === 'create'
-        ? 'Create coaching request'
-        : 'Edit coaching request message'
-    "
-    [coach]="selectedCoach"
-    [isVisible]="isVisible"
-    (closeModal)="isVisible = false"
-    (dataChanged)="handleSave()"
-  ></app-create-request>
-  <div>
+  <div class="search">
     <app-name-search (nameSearched)="filterCoaches($event)"></app-name-search>
   </div>
-  <h1>Coaches</h1>
-  <div class="cards-container">
-    <nz-card
-      *ngFor="let coach of filteredCoaches"
-      class="card"
-      [nzBordered]="true"
-    >
+  <div>
+    <h2>My coach</h2>
+    @if (coachOfClient) {
+    <nz-card class="card" [nzBordered]="true">
       <div class="card-content">
         <div class="card-title">
-          <h2>{{ coach.firstName + " " + coach.lastName }}</h2>
+          <h2>
+            {{ coachOfClient.firstName + " " + coachOfClient.lastName }}
+          </h2>
         </div>
         <div class="card-details">
-          <span>Number of clients</span>
-          <span>{{ coach.numberOfClients }}</span>
+          <span>Email:</span>
+          <span>{{ coachOfClient.email }}</span>
         </div>
-        <div class="action-button-container">
-          @if (coach.coachRequest && !coach.coachRequest.accepted &&
-          coach.coachRequest.active) {
-          <a style="text-align: center">Request was sent</a>
-          }@else if(coach.coachRequest&&!coach.coachRequest.accepted &&
-          !coach.coachRequest.active){
-          <a style="text-align: center">Request was denied</a>
-          }
-          <div *ngIf="!coach.coachRequest">&nbsp;</div>
-          <div class="button-container">
-            @if (!coachOfClient) {
-            <button
-              *ngIf="!coach.coachRequest"
-              (click)="openCreateRequestWindow(coach)"
-              nz-button
-              nzType="primary"
-            >
-              Send coaching request
-            </button>
-
-            }@else if(coach.coachRequest && !coach.coachRequest.accepted &&
-            coach.coachRequest.active){
-            <button
-              (click)="deleteRequest(coach.coachRequest.id)"
-              *ngIf="coach.coachRequest"
-              nz-button
-              nzType="default"
-              style="width: fit-content"
-            >
-              Delete coach request
-            </button>
-            }
-          </div>
+        <div class="button-container">
+          <button
+            (click)="deleteCoach(coachOfClient.id)"
+            nz-button
+            nzType="primary"
+          >
+            Delete coach
+          </button>
         </div>
       </div>
     </nz-card>
+    }
+  </div>
+
+  <div class="coaches">
+    <h1>Coaches</h1>
+    <div class="cards-container">
+      <nz-card
+        *ngFor="let coach of filteredCoaches"
+        class="card"
+        [nzBordered]="true"
+      >
+        <div class="card-content">
+          <div class="card-title">
+            <h2>{{ coach.firstName + " " + coach.lastName }}</h2>
+          </div>
+          <div class="card-details">
+            <span>Number of clients</span>
+            <span>{{ coach.numberOfClients }}</span>
+          </div>
+          <div class="action-button-container">
+            @if (coach.coachRequest && !coach.coachRequest.accepted &&
+            coach.coachRequest.active) {
+            <a style="text-align: center">Request was sent</a>
+            }@else if(coach.coachRequest&&!coach.coachRequest.accepted &&
+            !coach.coachRequest.active){
+            <a style="text-align: center">Request was denied</a>
+            }
+            <div *ngIf="!coach.coachRequest">&nbsp;</div>
+            <div class="button-container">
+              @if (!coachOfClient) {
+              <button
+                *ngIf="!coach.coachRequest"
+                (click)="openCreateRequestWindow(coach)"
+                nz-button
+                nzType="primary"
+              >
+                Send coaching request
+              </button>
+
+              }@else if(coach.coachRequest && !coach.coachRequest.accepted &&
+              coach.coachRequest.active){
+              <button
+                (click)="deleteRequest(coach.coachRequest.id)"
+                *ngIf="coach.coachRequest"
+                nz-button
+                nzType="default"
+                style="width: fit-content"
+              >
+                Delete coach request
+              </button>
+              }
+            </div>
+          </div>
+        </div>
+      </nz-card>
+    </div>
   </div>
 </div>

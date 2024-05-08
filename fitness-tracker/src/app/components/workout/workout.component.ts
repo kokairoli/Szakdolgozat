@@ -120,7 +120,14 @@ export class WorkoutComponent implements OnInit {
       return {
         start: new Date(workout.scheduled),
         end: addHours(new Date(workout.scheduled), 2),
-        title: workout.name,
+        title: workout.coach
+          ? workout.name +
+            ' (' +
+            workout.coach.firstName +
+            ' ' +
+            workout.coach.lastName +
+            ')'
+          : workout.name,
         color: workout.finished ? { ...colors['green'] } : { ...colors['red'] },
         actions: !workout.coach
           ? [

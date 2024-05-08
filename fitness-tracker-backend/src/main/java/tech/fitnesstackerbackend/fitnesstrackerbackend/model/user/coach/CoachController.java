@@ -32,12 +32,12 @@ public class CoachController {
         return coachService.getClientsOfCoach();
     }
 
-    @PatchMapping("/clients")
+    @PatchMapping("/clients/remove")
     public void removeClient(@RequestBody Integer clientId){
         coachService.removeClient(clientId);
     }
 
-    @PatchMapping()
+    @PatchMapping("/remove")
     public void removeCoach(@RequestBody Integer coachId){
         coachService.removeCoach(coachId);
     }
