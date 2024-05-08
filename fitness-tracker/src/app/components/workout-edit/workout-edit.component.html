@@ -21,6 +21,7 @@
         <div>
           <nz-date-picker
             nzShowTime
+            [nzDisabledDate]="disabledDate"
             nzFormat="yyyy-MM-dd HH:mm"
             formControlName="scheduled"
             nzPlaceHolder="Select date and time"
@@ -32,7 +33,7 @@
         <nz-select formControlName="clientId" [nzSize]="size" nzShowSearch>
           <nz-option
             *ngFor="let option of clientsOfCoach"
-            [nzLabel]="option.lastName + ' ' + option.firstName"
+            [nzLabel]="option.firstName + ' ' + option.lastName"
             [nzValue]="option.id"
           ></nz-option>
         </nz-select>

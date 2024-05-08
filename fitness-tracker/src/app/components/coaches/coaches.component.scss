@@ -1,6 +1,7 @@
 .coach-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
   padding: var(--default-container-padding);
 }
 
@@ -28,6 +29,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.coaches {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.search {
+  display: flex;
+  align-items: flex-end;
 }
 
 .card-details {

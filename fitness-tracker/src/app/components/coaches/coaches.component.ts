@@ -10,6 +10,7 @@ import { CoachingRequestDTO } from 'src/app/model/CoachingRequestDTOs/CoachingRe
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CreateRequestComponent } from './create-request/create-request.component';
 import { UserDTO } from 'src/app/model/UserDTOs/UserDTO';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 
 export interface CoachesWithRequests {
   id: number;
@@ -29,6 +30,7 @@ export interface CoachesWithRequests {
     NameSearchComponent,
     NzButtonModule,
     CreateRequestComponent,
+    NzModalModule,
   ],
   templateUrl: './coaches.component.html',
   styleUrls: ['./coaches.component.scss'],
@@ -36,6 +38,8 @@ export interface CoachesWithRequests {
 export class CoachesComponent implements OnInit {
   private readonly coachService = inject(CoachService);
   private readonly coachingRequestService = inject(CoachingRequestService);
+  private readonly modalService = inject(NzModalService);
+
   coaches: CoachesWithRequests[] = [];
   filteredCoaches: CoachesWithRequests[] = [];
   coachingRequests: CoachingRequestDTO[] = [];
@@ -94,11 +98,37 @@ export class CoachesComponent implements OnInit {
   }
 
   deleteRequest(coachingRequestId: number): void {
-    this.coachingRequestService
-      .deleteCoachingRequest(coachingRequestId)
-      .subscribe(() => {
-        this.getCoachesAndFilter();
-      });
+    this.modalService.confirm({
+      nzTitle: 'Are you sure?',
+      nzContent:
+        '<b style="color: red;">This action will delete this user from your clients</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.coachingRequestService
+          .deleteCoachingRequest(coachingRequestId)
+          .subscribe(() => {
+            this.getCoachesAndFilter();
+          }),
+      nzCancelText: 'No',
+    });
+  }
+
+  deleteCoach(coachId: number) {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure?',
+      nzContent:
+        '<b style="color: red;">This action will delete your coach!</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.coachService.removeCoach(coachId).subscribe(() => {
+          this.getCoachesAndFilter();
+        }),
+      nzCancelText: 'No',
+    });
   }
 
   handleSave(): void {

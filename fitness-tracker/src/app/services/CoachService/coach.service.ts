@@ -30,8 +30,15 @@ export class CoachService {
 
   removeClient(clientId: number): Observable<void> {
     return this.http.patch<void>(
-      environment.backendUrl + this.coachUrl + '/clients',
+      environment.backendUrl + this.coachUrl + '/clients/remove',
       clientId
+    );
+  }
+
+  removeCoach(coachId: number): Observable<void> {
+    return this.http.patch<void>(
+      environment.backendUrl + this.coachUrl + '/remove',
+      coachId
     );
   }
 }

@@ -88,7 +88,15 @@
         }
       </div>
       <h3>Current weight</h3>
-      <div>{{ currentWeight?.weight }}</div>
+      <div
+        [class.goal-weight-achieved]="
+          currentWeight?.weight &&
+          clientGoal?.targetWeight &&
+          (currentWeight?.weight ?? 0) <= (clientGoal?.targetWeight ?? -1)
+        "
+      >
+        {{ currentWeight?.weight }}
+      </div>
       <h3>Smallest weight</h3>
       <div>{{ smallestWeight }}</div>
       <h3>Biggest weight</h3>

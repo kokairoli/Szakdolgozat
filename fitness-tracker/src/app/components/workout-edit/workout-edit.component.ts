@@ -36,6 +36,7 @@ import { CoachService } from 'src/app/services/CoachService/coach.service';
 import { UserDTO } from 'src/app/model/UserDTOs/UserDTO';
 import { WorkoutOfCoachDTO } from 'src/app/model/WorkoutDTOs/WorkoutOfCoachDTO';
 import { CreateWorkoutCoachDTO } from 'src/app/model/WorkoutDTOs/CreateWorkoutCoachDTO';
+import { differenceInCalendarDays } from 'date-fns';
 
 interface EditCreateExerciseSet {
   id: number;
@@ -101,6 +102,10 @@ export class WorkoutEditComponent implements OnInit, OnChanges {
     clientId: new FormControl<number | null>(null, [Validators.required]),
     exerciseSet: this.fb.array<EditCreateExerciseSet>([]),
   });
+
+  disabledDate = (current: Date): boolean =>
+    differenceInCalendarDays(current, this.today) < 0;
+  today = new Date();
 
   timeZoneOffset = new Date().getTimezoneOffset() * -1;
 

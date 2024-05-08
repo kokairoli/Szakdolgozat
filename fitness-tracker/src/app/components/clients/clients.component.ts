@@ -6,17 +6,19 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { CoachService } from 'src/app/services/CoachService/coach.service';
 import { UserDTO } from 'src/app/model/UserDTOs/UserDTO';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [NameSearchComponent, NzCardModule, NzButtonModule],
+  imports: [NameSearchComponent, NzCardModule, NzButtonModule, NzModalModule],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',
 })
 export class ClientsComponent implements OnInit {
   private readonly coachRequestService = inject(CoachingRequestService);
   private readonly coachService = inject(CoachService);
+  private readonly modalService = inject(NzModalService);
 
   coachingRequests: CoachingRequestDTO[] = [];
   clients: UserDTO[] = [];
@@ -58,9 +60,19 @@ export class ClientsComponent implements OnInit {
   }
 
   deleteClient(client: UserDTO) {
-    this.coachService.removeClient(client.id).subscribe(() => {
-      this.getClients();
-      this.getRequests();
+    this.modalService.confirm({
+      nzTitle: 'Are you sure?',
+      nzContent:
+        '<b style="color: red;">This action will delete this user from your clients</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.coachService.removeClient(client.id).subscribe(() => {
+          this.getClients();
+          this.getRequests();
+        }),
+      nzCancelText: 'No',
     });
   }
 }
