@@ -13,16 +13,35 @@
           </div>
           <div class="text-container">
             <div>
-              <h2>Create your own workouts!</h2>
+              @if (isClient) {
+              <h2>Create your own workouts</h2>
               <span
                 >Manage your time easily with the calendar function, and plan
                 ahead, so you can have a very pleasant workout!</span
               >
+              }@else{
+              <h2>Assign workout for your Clients</h2>
+              <span
+                >Manage your clients workout. Help them keep a regular and
+                balanced workout routine!</span
+              >
+              }
             </div>
-            <button nz-button nzType="primary">
+            @if (isClient) {
+            <button nz-button nzType="primary" (click)="navigateTo('workout')">
               Go to workout
               <span nz-icon nzType="right"></span>
             </button>
+            }@else{
+            <button
+              nz-button
+              nzType="primary"
+              (click)="navigateTo('assign-workout')"
+            >
+              Go to assign workout
+              <span nz-icon nzType="right"></span>
+            </button>
+            }
           </div>
         </div>
       </nz-card>
@@ -39,17 +58,29 @@
           </div>
           <div class="text-container">
             <div>
-              <h2>Track your progress!</h2>
+              @if (isClient) {
+              <h2>Track your progress</h2>
               <span
-                >Manage your time easily with the calendar function, and plan
-                ahead, so you can have a very pleasant workout!</span
+                >Start tracking your progress. Keep track of your weight, set an
+                exercise goal, and keep watching how you improve!</span
               >
+              }@else{
+              <h2>Help others reach their goals</h2>
+              <span
+                >As a coach, you can help your clients reach their goals. can
+                help them improve their health and fitness.</span
+              >
+
+              }
             </div>
 
-            <button nz-button nzType="primary">
+            @if (isClient) {
+            <button nz-button nzType="primary" (click)="navigateTo('progress')">
               Go to progress
               <span nz-icon nzType="right"></span>
             </button>
+
+            }
           </div>
         </div>
       </nz-card>
@@ -66,13 +97,17 @@
           </div>
           <div class="text-container">
             <div>
-              <h2>Create your own workouts!</h2>
+              <h2>Browse exercises</h2>
               <span
-                >Manage your time easily with the calendar function, and plan
-                ahead, so you can have a very pleasant workout!</span
+                >If you want to search for an exercise, you can do that here.
+                Find exercises that suits your needs!</span
               >
             </div>
-            <button nz-button nzType="primary">
+            <button
+              nz-button
+              nzType="primary"
+              (click)="navigateTo('exercises')"
+            >
               Go to exercises
               <span nz-icon nzType="right"></span>
             </button>
@@ -86,22 +121,40 @@
           <div>
             <img
               alt="workout"
-              style="width: 100%"
+              style="width: 100%; height: 100%"
               src="../../../assets/images/coaches.jfif"
             />
           </div>
           <div class="text-container">
             <div>
-              <h2>Create your own workouts!</h2>
+              @if (isClient) {
+              <h2>Request coaching</h2>
               <span
-                >Manage your time easily with the calendar function, and plan
-                ahead, so you can have a very pleasant workout!</span
+                >If you are new to working out regularly or just want a
+                professional to create your workouts, request a coach. This will
+                help you train even more effectively</span
               >
+              }@else{
+              <h2>Coach clients</h2>
+              <span
+                >As a coach, you can find clients here. Help them get in better
+                shape. You can view your requests, accept or refuse them. Manage
+                your clients</span
+              >
+              }
             </div>
-            <button nz-button nzType="primary">
+            @if (isClient) {
+            <button nz-button nzType="primary" (click)="navigateTo('coaches')">
               Go to coaches
               <span nz-icon nzType="right"></span>
             </button>
+
+            }@else{
+            <button nz-button nzType="primary" (click)="navigateTo('clients')">
+              Go to clients and requests
+              <span nz-icon nzType="right"></span>
+            </button>
+            }
           </div>
         </div>
       </nz-card>

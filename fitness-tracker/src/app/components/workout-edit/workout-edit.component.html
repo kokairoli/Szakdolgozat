@@ -9,16 +9,25 @@
   <ng-template #modalContent>
     <form [formGroup]="isCoach ? coachWorkoutFormGroup : workoutFormGroup">
       <div class="basic-form-inputs">
-        <nz-form-control nzErrorTip="Name cannot be empty!">
-          <input nz-input placeholder="Name" type="text" formControlName="name"
-        /></nz-form-control>
+        <input nz-input placeholder="Name" type="text" formControlName="name" />
+        <app-input-error
+          [showError]="
+            isCoach
+              ? !coachWorkoutFormGroup.get('name')?.valid &&
+                (coachWorkoutFormGroup.get('name')?.touched ?? false)
+              : !workoutFormGroup.get('name')?.valid &&
+                (workoutFormGroup.get('name')?.touched ?? false)
+          "
+          [errorMessage]="'Name is required!'"
+        ></app-input-error>
         <textarea
+          class="input-margin"
           placeholder="Comment"
           rows="4"
           nz-input
           formControlName="comment"
         ></textarea>
-        <div>
+        <div style="display: flex; flex-direction: column">
           <nz-date-picker
             nzShowTime
             [nzDisabledDate]="disabledDate"
@@ -26,10 +35,20 @@
             formControlName="scheduled"
             nzPlaceHolder="Select date and time"
           ></nz-date-picker>
+          <app-input-error
+            [showError]="
+              isCoach
+                ? !coachWorkoutFormGroup.get('scheduled')?.valid &&
+                  (coachWorkoutFormGroup.get('scheduled')?.touched ?? false)
+                : !workoutFormGroup.get('scheduled')?.valid &&
+                  (workoutFormGroup.get('scheduled')?.touched ?? false)
+            "
+            [errorMessage]="'Scheduled is required!'"
+          ></app-input-error>
         </div>
       </div>
       @if (isCoach) {
-      <nz-form-control nzErrorTip="You select a client!">
+      <nz-form-control>
         <nz-select formControlName="clientId" [nzSize]="size" nzShowSearch>
           <nz-option
             *ngFor="let option of clientsOfCoach"
@@ -38,6 +57,13 @@
           ></nz-option>
         </nz-select>
       </nz-form-control>
+      <app-input-error
+        [showError]="
+          !coachWorkoutFormGroup.get('clientId')?.valid &&
+          (coachWorkoutFormGroup.get('clientId')?.touched ?? false)
+        "
+        [errorMessage]="'You must choose a client!'"
+      ></app-input-error>
       }
       <div formArrayName="exerciseSet">
         <h2>Exercises</h2>
@@ -57,14 +83,12 @@
             type="number"
             formControlName="numberOfReps"
           />
-          <nz-form-control nzErrorTip="Must be grater than 0!">
-            <input
-              nz-input
-              placeholder="Sets"
-              type="number"
-              formControlName="numberOfSets"
-            />
-          </nz-form-control>
+          <input
+            nz-input
+            placeholder="Sets"
+            type="number"
+            formControlName="numberOfSets"
+          />
           <div style="display: flex; flex-direction: row">
             <nz-form-control nzErrorTip="You must choose an exercise!">
               <nz-select
@@ -90,6 +114,11 @@
               <span nz-icon nzType="delete" nzTheme="outline"></span>
             </button>
           </div>
+          <app-input-error
+            class="full-grid"
+            [showError]="!isExerciseSetValid(i)"
+            [errorMessage]="'You must fill out all of the fields!'"
+          ></app-input-error>
         </div>
         <div class="add-button-container">
           <button

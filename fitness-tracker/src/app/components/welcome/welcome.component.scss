@@ -1,7 +1,6 @@
 .welcome-container {
-  height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   padding: var(--default-container-padding);
   gap: 1rem;
 }
@@ -30,4 +29,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  justify-self: flex-end;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo img {
+  max-width: 70%;
+  border-radius: 100%;
+  margin-bottom: 3rem;
+}
+
+.name-div {
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+}
+
+.name-input {
+  display: flex;
+  flex-direction: column;
 }

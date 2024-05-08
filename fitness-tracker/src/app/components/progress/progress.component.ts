@@ -31,6 +31,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { EditGoalDTO } from 'src/app/model/GoalDTOs/EditGoalDTO';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { InputErrorComponent } from '../input-error/input-error.component';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -56,6 +57,7 @@ export type ChartOptions = {
     NzIconModule,
     NzInputNumberModule,
     NzCalendarModule,
+    InputErrorComponent,
   ],
   templateUrl: './progress.component.html',
   styleUrls: ['./progress.component.scss'],
@@ -93,11 +95,13 @@ export class ProgressComponent implements OnInit {
   ]);
 
   weightGoalFormControl = new FormControl<number | undefined>(undefined, [
+    Validators.required,
     Validators.min(30),
     Validators.max(635),
   ]);
 
   workoutGoalFormControl = new FormControl<number | undefined>(undefined, [
+    Validators.required,
     Validators.min(1),
   ]);
 

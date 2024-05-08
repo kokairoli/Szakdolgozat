@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/UserService/user.service';
 import { AuthResponseDTO } from 'src/app/model/UserDTOs/AuthResponseDTO';
 import { Router } from '@angular/router';
 import { UserStorageService } from 'src/app/services/UserStorage/user-storage.service';
+import { InputErrorComponent } from '../input-error/input-error.component';
 
 @Component({
   selector: 'app-welcome',
@@ -22,6 +23,7 @@ import { UserStorageService } from 'src/app/services/UserStorage/user-storage.se
     ReactiveFormsModule,
     NzButtonModule,
     NzButtonModule,
+    InputErrorComponent,
   ],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
@@ -32,28 +34,47 @@ export class WelcomeComponent {
   clientFormsShown = true;
 
   clientLoginFormGroup: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+    ]),
     password: new FormControl('', [Validators.required]),
   });
 
   clientRegisterFormGroup: FormGroup = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
     firstName: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+    ]),
     password: new FormControl('', [Validators.required]),
   });
 
   coachLoginFormGroup: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+    ]),
     password: new FormControl('', [Validators.required]),
   });
 
   coachRegisterFormGroup: FormGroup = new FormGroup({
     lastName: new FormControl('', [Validators.required]),
     firstName: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+    ]),
     password: new FormControl('', [Validators.required]),
   });
+
+  authErrors = {
+    clientLogin: '',
+    clientRegister: '',
+    coachLogin: '',
+    coachRegister: '',
+  };
 
   constructor(
     private userService: UserService,
@@ -70,7 +91,11 @@ export class WelcomeComponent {
         password: this.clientRegisterFormGroup.get('password')?.value,
       })
       .subscribe((response: AuthResponseDTO) => {
-        this.saveUserAndNavigateToHome(response);
+        if (!response.errorMessage) {
+          this.saveUserAndNavigateToHome(response);
+        } else {
+          this.authErrors.clientRegister = response.errorMessage;
+        }
       });
   }
 
@@ -82,8 +107,17 @@ export class WelcomeComponent {
           email: this.clientLoginFormGroup.get('email')?.value,
           password: this.clientLoginFormGroup.get('password')?.value,
         })
-        .subscribe((response: AuthResponseDTO) => {
-          this.saveUserAndNavigateToHome(response);
+        .subscribe({
+          next: (response: AuthResponseDTO) => {
+            if (!response.errorMessage) {
+              this.saveUserAndNavigateToHome(response);
+            } else {
+              this.authErrors.clientLogin = response.errorMessage;
+            }
+          },
+          error: () => {
+            this.authErrors.clientLogin = 'Invalid email or password';
+          },
         });
     }
   }
@@ -104,7 +138,11 @@ export class WelcomeComponent {
         password: this.coachRegisterFormGroup.get('password')?.value,
       })
       .subscribe((response: AuthResponseDTO) => {
-        this.saveUserAndNavigateToHome(response);
+        if (!response.errorMessage) {
+          this.saveUserAndNavigateToHome(response);
+        } else {
+          this.authErrors.coachRegister = response.errorMessage;
+        }
       });
   }
 
@@ -116,8 +154,17 @@ export class WelcomeComponent {
           email: this.coachLoginFormGroup.get('email')?.value,
           password: this.coachLoginFormGroup.get('password')?.value,
         })
-        .subscribe((response: AuthResponseDTO) => {
-          this.saveUserAndNavigateToHome(response);
+        .subscribe({
+          next: (response: AuthResponseDTO) => {
+            if (!response.errorMessage) {
+              this.saveUserAndNavigateToHome(response);
+            } else {
+              this.authErrors.coachLogin = response.errorMessage;
+            }
+          },
+          error: () => {
+            this.authErrors.coachLogin = 'Invalid email or password';
+          },
         });
     }
   }
