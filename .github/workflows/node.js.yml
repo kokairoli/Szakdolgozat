@@ -8,14 +8,17 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    
+defaults:
+      run:
+        working-directory: ./fitness-tracker
 
 jobs:
   angular:
     name: Angular Build
+    
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./fitness-tracker
+    
     strategy:
       matrix:
         node-version: [20]
