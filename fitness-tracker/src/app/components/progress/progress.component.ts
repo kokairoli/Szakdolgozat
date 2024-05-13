@@ -32,6 +32,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { EditGoalDTO } from 'src/app/model/GoalDTOs/EditGoalDTO';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { InputErrorComponent } from '../input-error/input-error.component';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -66,7 +67,7 @@ export class ProgressComponent implements OnInit {
   private readonly weightService = inject(WeightService);
   private readonly goalService = inject(GoalService);
   private readonly workoutService = inject(WorkoutService);
-
+  private readonly messageService = inject(NzMessageService);
   @ViewChild('chartObj') chart?: ChartComponent;
 
   weights: WeightDTO[] = [];
@@ -218,6 +219,10 @@ export class ProgressComponent implements OnInit {
   }
 
   handleNewWeight(): void {
+    const alreadyUnderWeight =
+      this.currentWeight?.weight && this.clientGoal?.targetWeight
+        ? this.currentWeight?.weight <= this.clientGoal?.targetWeight
+        : false;
     if (
       this.addWeightFormControl.value &&
       this.addWeightFormControl.valid &&
@@ -228,6 +233,15 @@ export class ProgressComponent implements OnInit {
         .addWeight({ weight: this.addWeightFormControl.value })
         .subscribe({
           next: (weightDTO: WeightDTO) => {
+            if (
+              !alreadyUnderWeight &&
+              this.clientGoal &&
+              this.clientGoal?.targetWeight >= weightDTO.weight
+            ) {
+              this.messageService.success(
+                'Congratulations! You have reached your goal weight! Keep it going!'
+              );
+            }
             this.currentWeight = weightDTO;
             this.addWeightVisible = false;
             this.isLoading = false;

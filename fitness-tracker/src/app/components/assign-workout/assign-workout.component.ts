@@ -38,13 +38,9 @@ const colors: Record<string, EventColor> = {
     primary: '#ad2121',
     secondary: '#FAE3E3',
   },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
+  grey: {
+    primary: '#bdbdbd',
+    secondary: '#bdbdbd',
   },
   green: {
     primary: '#2bf05c',
@@ -115,6 +111,8 @@ export class AssignWorkoutComponent implements OnInit {
 
   activeDayIsOpen: boolean = true;
 
+  present = new Date();
+
   ngOnInit(): void {
     this.getWorkouts();
   }
@@ -155,9 +153,7 @@ export class AssignWorkoutComponent implements OnInit {
               workoutGroup.client.lastName +
               '<br>' +
               workout.name,
-            color: workout.finished
-              ? { ...colors['green'] }
-              : { ...colors['red'] },
+            color: { ...colors[this.workoutColorByDate(workout)] },
             actions: [
               {
                 label: !workout.finished ? '<span>Edit </span>' : '',
@@ -225,6 +221,19 @@ export class AssignWorkoutComponent implements OnInit {
   editWorkout(selectedWorkout: WorkoutOfCoachDTO) {
     this.selectedWorkout = selectedWorkout;
     this.showWorkoutEdit();
+  }
+
+  workoutColorByDate(workout: WorkoutOfCoachDTO): 'red' | 'green' | 'grey' {
+    const workoutDate = new Date(workout.scheduled);
+    workoutDate.setHours(workoutDate.getHours() + 2);
+    if (workout.finished) {
+      return 'green';
+    }
+    if (workoutDate < this.present && !workout.finished) {
+      return 'red';
+    } else {
+      return 'grey';
+    }
   }
 
   showWorkoutEdit() {

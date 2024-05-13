@@ -12,14 +12,14 @@
         <div
           style="display: flex; align-items: center; justify-content: center"
         >
-          <input
+          <nz-input-number
             type="number"
             style="width: 50%"
-            nz-input
-            min="0"
-            max="635"
+            [nzStep]="1"
+            [nzMin]="30"
+            [nzMax]="635"
             [formControl]="addWeightFormControl"
-          />
+          ></nz-input-number>
         </div>
         <app-input-error
           [showError]="
@@ -73,7 +73,12 @@
           Set goal
         </button>
         } }@else{
-        <input nz-input type="number" [formControl]="weightGoalFormControl" />
+        <nz-input-number
+          [nzStep]="1"
+          [nzMin]="30"
+          [nzMax]="635"
+          [formControl]="weightGoalFormControl"
+        ></nz-input-number>
         <button
           nz-button
           nzType="primary"
@@ -171,7 +176,11 @@
           Set goal
         </button>
         } }@else{
-        <input nz-input type="number" [formControl]="workoutGoalFormControl" />
+        <nz-input-number
+          [nzStep]="1"
+          [nzMin]="1"
+          [formControl]="workoutGoalFormControl"
+        ></nz-input-number>
         <button
           nz-button
           nzType="primary"
@@ -193,7 +202,6 @@
       </div>
       <h3>Planned workouts</h3>
       <div>{{ currentMonthWorkouts.length }}</div>
-
       <h3>Finished workouts</h3>
       <div>{{ currentMonthFinishedWorkouts }}</div>
 
