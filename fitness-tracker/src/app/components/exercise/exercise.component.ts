@@ -14,6 +14,7 @@ import { ExerciseEnumsDTO } from 'src/app/model/ExerciseDTOs/ExerciseEnumsDTO';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { columnItem } from 'src/app/interfaces/columnItem';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-exercise',

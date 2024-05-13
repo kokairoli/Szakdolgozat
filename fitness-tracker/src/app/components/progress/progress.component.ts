@@ -33,6 +33,7 @@ import { EditGoalDTO } from 'src/app/model/GoalDTOs/EditGoalDTO';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { InputErrorComponent } from '../input-error/input-error.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;

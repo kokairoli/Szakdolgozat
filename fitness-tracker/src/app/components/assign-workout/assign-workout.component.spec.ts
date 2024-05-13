@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AssignWorkoutComponent } from './assign-workout.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('AssignWorkoutComponent', () => {
   let component: AssignWorkoutComponent;
@@ -8,10 +9,9 @@ describe('AssignWorkoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AssignWorkoutComponent]
-    })
-    .compileComponents();
-    
+      imports: [AssignWorkoutComponent, HttpClientModule],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AssignWorkoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

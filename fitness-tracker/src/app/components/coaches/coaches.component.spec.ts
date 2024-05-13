@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CoachesComponent } from './coaches.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('CoachesComponent', () => {
   let component: CoachesComponent;
@@ -8,9 +9,8 @@ describe('CoachesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ CoachesComponent ]
-    })
-    .compileComponents();
+      imports: [CoachesComponent, HttpClientModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CoachesComponent);
     component = fixture.componentInstance;
