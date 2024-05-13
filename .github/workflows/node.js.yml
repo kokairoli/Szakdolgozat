@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: ["main"]
 
+defaults:
+  run:
+    working-directory: ./fitness-tracker
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,7 +47,6 @@ jobs:
 
       - name: Install dependencies and deploy client
         run: |
-          cd client
           npm i typescript
           npm install
           npm run deploy-start
