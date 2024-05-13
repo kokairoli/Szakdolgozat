@@ -20,9 +20,8 @@ jobs:
           node-version: 20
 
       - name: Install dependencies and build for client
-        working-directory: client
+        working-directory: fitness-tracker
         run: |
-          cd fitness-tracker
           npm i typescript
           npm install
           npm test -- --watch=false --browsers=ChromeHeadless
