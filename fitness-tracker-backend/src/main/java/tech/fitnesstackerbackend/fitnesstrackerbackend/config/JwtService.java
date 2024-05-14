@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String KEY = "KqwLG2Yt2jopqdWeq6k3mAnLSlptPJ8jf7g6FEuyOT+jAUdhFbKtPY+JY+gJh+/W1oqjov+x4JPkrjcfvlT+m6kjLko6PUOmULQP0iCjybC5+OMGsrQdQbxJQ4cXEax8nv3EdeSkmilZ/pU7Y+vyyQ";
-    private final Integer tokenValidUntilInMillis = 10000*60*10;
+    private final Integer tokenValidUntilInMillis = 10000*60*100;
 
 
 
